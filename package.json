@@ -1,0 +1,22 @@
+{
+  "name": "emu-bot",
+  "version": "2.0.0",
+  "description": "えむbot ver.discord.js v14",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "19.x"
+  },
+  "dependencies": {
+    "@discordjs/voice": "^0.17.0",
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "discord.js": "^14.15.2",
+    "dotenv": "^16.4.5",
+    "form-data": "^4.0.0",
+    "tweetnacl": "^1.0.3",
+    "ytdl-core": "^4.11.5"
+  }
+}
