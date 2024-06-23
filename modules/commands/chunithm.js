@@ -22,13 +22,15 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
+    // 選曲オプションと曲数を取得
     const option = interaction.options.getString("action");
     const count = interaction.options.getInteger("count");
-
+   //deferReply 
     await interaction.deferReply();
     
     let dataFilePath;
 
+    // 選択
     switch (option) {
       case "all":
         dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'chunithm', 'chunithm ALL.txt');
@@ -45,18 +47,22 @@ module.exports = {
     }
 
     try {
+      // txtの読み込み
       const rawData = fs.readFileSync(dataFilePath, 'utf8');
       const songList = rawData.split('\n').filter(song => song.trim() !== '');
 
+      // txt内が空の場合
       if (songList.length === 0) {
         await interaction.editReply("曲が見つかりませんでした。");
         return;
       }
+      // 曲数が1より少ないかtxt内より多い場合
       if (count < 1 || count > songList.length) {
         await interaction.editReply("曲数は1以上、曲リストの総数以下で指定してください。");
         return;
       }
 
+      // ランダム
       const selectedSongs = [];
       while (selectedSongs.length < count) {
         const randomIndex = Math.floor(Math.random() * songList.length);
@@ -66,6 +72,7 @@ module.exports = {
         }
       }
 
+      // embedを送信
       const embed = new EmbedBuilder()
         .setTitle(`ランダム選曲の結果 (${selectedSongs.length} 曲)`)
         .setDescription(selectedSongs.join("\n"))
