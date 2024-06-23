@@ -18,11 +18,14 @@ module.exports = {
   async execute(interaction) {
     
     try {
+      // topの文字列とbottomの文字列を取得
       const top = interaction.options.getString('top');
       const bottom = interaction.options.getString('bottom');
-      
+
+      // deferReply
       await interaction.deferReply();
 
+      // embedを送信
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setFooter({ text:'Emubot | 5000choyen'})
