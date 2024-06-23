@@ -9,7 +9,7 @@ module.exports = {
         // 作成するチャンネル名
         const channelName = 'えむbot開発室';
 
-// ユーザーとbotの権限の確認
+　　　　// ユーザーとbotの権限の確認
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
             return interaction.reply({ content: 'あなたに実行権限が有りません。', ephemeral: true });
         }
@@ -18,7 +18,7 @@ module.exports = {
             return interaction.reply({ content: 'チャンネルの作成権限がありません。', ephemeral: true });
         }
 
-// えむbot開発室が既にある場合の処理
+　　　　// えむbot開発室が既にある場合の処理
         const existingChannel = guild.channels.cache.find(channel => channel.name === channelName && channel.type === 0);
 
         if (existingChannel) {
