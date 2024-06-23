@@ -11,12 +11,15 @@ module.exports = {
   
   async execute(interaction) {
     try {
-
       await interaction.deferReply();
-      
+
+    // 式を取得
       let expression = interaction.options.getString('expression');
+    // ×と÷はそのままだと認識されないので*と/に変換
       expression = expression.replace(/×/g, '*').replace(/÷/g, '/');
       const result = Function(`'use strict'; return ${expression}`)();
+
+    // embedを送信
       const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'calc.png');
 
       const embed = new EmbedBuilder()
