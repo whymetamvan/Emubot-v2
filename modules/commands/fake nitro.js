@@ -22,7 +22,7 @@ module.exports = {
             }
             const nitroLinks = generateNitroLinks(countLimited);
 
-          // embedを送信
+          // embedを送信 (Descriptionの絵文字は適宜変更)
             const embed = new EmbedBuilder()
                 .setColor('#f47fff')
                 .setTimestamp()
