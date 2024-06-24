@@ -16,4 +16,4 @@ https://discord.com/oauth2/authorize?client_id=1211256321484005436&permissions=8
 3・[config.json](lib/data/config.json)にIDとlogChannelIdを入力<br>
 4・```node index.js``` で起動します
 ## コマンドや機能等
-[commands.md](commands.md)を参照
+[commandlist](commandlist.md)を参照
