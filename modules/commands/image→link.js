@@ -1,0 +1,78 @@
+const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
+const path = require('path');
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('image-to-link')
+        .setDescription('画像をリンクに変換します')
+        .addAttachmentOption(option => 
+            option.setName('image')
+                .setDescription('リンクにしたい画像をアップロード')
+                .setRequired(true)
+        ),
+    
+    async execute(interaction) {
+        await interaction.deferReply({ ephemeral:true });
+
+      // 画像を取得
+        const attachment = interaction.options.getAttachment('image');
+        const imagePath = path.join(__dirname, attachment.name);
+
+        try {
+          // アップロードされた画像をファイルとして一時保存
+            const writer = fs.createWriteStream(imagePath);
+            const response = await axios.get(attachment.url, { responseType: 'stream' });
+            response.data.pipe(writer);
+
+            await new Promise((resolve, reject) => {
+                writer.on('finish', resolve);
+                writer.on('error', reject);
+            });
+
+          // ファイルをフォームに追加、APIに投げる
+            const form = new FormData();
+            form.append('files', fs.createReadStream(imagePath));
+
+            const uploadResponse = await axios.post('https://hm-nrm.h3z.jp/uploader/work.php', form, {
+                headers: {
+                    ...form.getHeaders(),
+                    'Accept': 'application/json'
+                }
+            });
+
+        
+            const uploadData = uploadResponse.data;
+            if (uploadData.files && uploadData.files.length > 0) {
+                const imageUrl = uploadData.files[0].url;
+
+              // embedを送信
+                const embed = new EmbedBuilder()
+                    .setColor(0xf8b4cb)
+                    .setTitle('リンクに変換しました！')
+                    .setTimestamp()
+                    .setFooter({ text: "Emutest | image-to-link"})
+                    .setDescription(`画像のリンク: ${imageUrl}`)
+                    .setImage(imageUrl);
+
+                await interaction.editReply({ embeds: [embed] });
+            } else {
+                throw new Error('画像のアップロードに失敗しました。');
+            }
+        } catch (error) {
+            console.error(error);
+
+            try {
+                await interaction.editReply({ content: '画像のアップロード中にエラーが発生しました。', ephemeral: true });
+            } catch (replyError) {
+                console.error('Failed to send error message to the user:', replyError);
+            }
+        } finally {
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+        }
+    },
+};
