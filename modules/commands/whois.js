@@ -16,7 +16,7 @@ module.exports = {
         await interaction.deferReply();
       // ドメインとAPIを取得、ip2whoisAPIに投げる
         const domain = interaction.options.getString('domain');
-        const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'whois.png');
+        const thumbnailPath = path.join(__dirname, '../../lib/images/whois.png');
         const ip2_API = process.env.ip_API;
         try {
 
