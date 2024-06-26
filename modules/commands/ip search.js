@@ -17,7 +17,7 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'ip.png');
+            const thumbnailPath = path.join(__dirname, '../../lib/images/ip.png');
 
             // apiキーを取得、ip2locationAPIに投げる
             const ip2_API = process.env.ip_API;
