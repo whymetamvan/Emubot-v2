@@ -9,7 +9,7 @@ module.exports = {
     async execute(interaction) {
         try {
             await interaction.deferReply();
-            const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'dice.gif');
+            const thumbnailPath = path.join(__dirname, '../../lib/images/dice.gif');
             const diceRoll = Math.floor(Math.random() * 6) + 1;
 
             // embedを送信
