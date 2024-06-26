@@ -33,7 +33,7 @@ if (hasMention(text)) {
   await interaction.editReply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
   return;
 }
-  const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'translate.png');
+  const thumbnailPath = path.join(__dirname, '../../lib/images/translate.png');
   try {
     const translatedText = await gasTranslate(text, 'ja', targetLanguage);
 
