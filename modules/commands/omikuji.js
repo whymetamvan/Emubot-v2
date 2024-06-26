@@ -12,6 +12,7 @@ module.exports = {
     await interaction.deferReply();
     try {
       const userId = interaction.user.id;
+      const thumbnailPath = path.join(__dirname, '../../lib/images/omikuji.png');
 
       // おみくじ、embedの送信
       if (!dailyFortunes.has(userId) || !isToday(dailyFortunes.get(userId))) {
@@ -48,8 +49,6 @@ module.exports = {
     }
   },
 };
-
-const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'omikuji.png');
 
 function isToday(date) {
   const today = new Date();
