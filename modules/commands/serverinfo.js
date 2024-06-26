@@ -15,7 +15,7 @@ module.exports = {
     const categoryChannelsCount = guild.channels.cache.filter(c => c.type === 4).size;
 
     // もしサーバーアイコンがない場合はlib/images/none.pngを使用
-    const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'none.png');
+    const thumbnailPath = path.join(__dirname, '../../lib/images/none.png');
     let thumbnailUrl;
     let file;
 
