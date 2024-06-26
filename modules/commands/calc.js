@@ -1,4 +1,6 @@
 const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
+const path = require('path');
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('calc')
@@ -20,7 +22,7 @@ module.exports = {
       const result = Function(`'use strict'; return ${expression}`)();
 
     // embedを送信
-      const thumbnailPath = path.join(__dirname, '..', '..', 'lib', 'images', 'calc.png');
+      const thumbnailPath = path.join(__dirname, '../../lib/images/calc.png');
 
       const embed = new EmbedBuilder()
       .setColor('#f8b4cb')
