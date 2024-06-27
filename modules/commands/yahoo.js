@@ -7,7 +7,7 @@ const cooldowns = new Map();
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('yahoo')
+        .setName('yahoonews')
         .setDescription('ランダムなYahooニュースリンクを取得します'),
 
     async execute(interaction) {
