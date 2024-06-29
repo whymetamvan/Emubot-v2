@@ -9,7 +9,9 @@
 [![discord](https://img.shields.io/badge/-discord-black.svg?logo=discord&style=for-the-badge)](https://discord.gg/rwh6TvphJ9) 
 <br>
 えむbotの導入↓<br>
-https://discord.com/oauth2/authorize?client_id=1211256321484005436&permissions=8&scope=bot
+https://discord.com/oauth2/authorize?client_id=1211256321484005436&permissions=8&scope=bot<br>
+えむbotのサイト<br>
+https://emubot.glitch.me/index.html
 ## 起動
 1・[.env.sample](.env.sample)にbotのToken,APIの必要事項を入力<br>
 2・.sampleの部分を消す。<br>
