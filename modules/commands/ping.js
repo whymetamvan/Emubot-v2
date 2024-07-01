@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('ping'),
+    .setDescription('ping値の表示'),
   async execute(interaction) {
 
     // embedの送信
@@ -14,8 +14,8 @@ module.exports = {
       .setTimestamp()
       .setFooter({ text:'Emubot | Ping'})
       .addFields(
-        { name: 'WebSocket Ping', value: `${interaction.client.ws.ping}ms`, inline: true },
-        { name: 'API-Endpoint Ping', value: `${Date.now() - interaction.createdTimestamp}ms`, inline: true },
+        { name: 'WebSocket Ping', value: '``'+`${interaction.client.ws.ping}ms`+'``', inline: true },
+        { name: 'API-Endpoint Ping', value: '``'+`${Date.now() - interaction.createdTimestamp}ms`+'``', inline: true },
         );
 
     try {
