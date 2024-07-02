@@ -1,4 +1,3 @@
-// index.js
 require('dotenv').config();
 const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js');
 
@@ -66,6 +65,15 @@ process.on('unhandledRejection', async (reason, promise) => {
   const logChannel = client.channels.cache.get(config.logChannelId);
   if (logChannel) {
     logChannel.send(`Unhandled Rejection at: ${promise}\nReason: ${reason}`);
+  }
+});
+
+// uncaughtExceptionをキャッチ
+process.on('uncaughtException', async (error) => {
+  console.error('Uncaught Exception:', error);
+  const logChannel = client.channels.cache.get(config.logChannelId);
+  if (logChannel) {
+    logChannel.send(`Uncaught Exception: ${error.message}`);
   }
 });
 
