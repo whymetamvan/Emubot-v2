@@ -13,9 +13,9 @@ https://discord.com/oauth2/authorize?client_id=1211256321484005436&permissions=8
 えむbotのサイト<br>
 https://emubot.glitch.me/index.html
 ## 起動
-1・[.env.sample](.env.sample)にbotのToken,APIの必要事項を入力<br>
-2・.sampleの部分を消す。<br>
-3・[config.json](lib/data/config.json)にIDとlogChannelIdを入力<br>
-4・```node index.js``` で起動します
+1 : [.env.sample](.env.sample)にbotのToken,APIの必要事項を入力<br>
+2 : .sampleの部分を消す。<br>
+3 : [config.json](lib/data/config.json)にIDとlogChannelIdを入力<br>
+4 : ```node index.js``` で起動します
 ## コマンドや機能等
 [commandlist](commandlist.md)を参照
