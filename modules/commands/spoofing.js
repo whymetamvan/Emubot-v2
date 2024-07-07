@@ -15,7 +15,7 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral:true });
         // botの権限確認
-        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
+        if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
             return interaction.editReply('webhookの管理権限がありません');
         }
 
