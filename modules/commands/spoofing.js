@@ -13,7 +13,10 @@ module.exports = {
         .addStringOption(option =>
             option.setName('message')
                 .setDescription('送信するメッセージ')
-                .setRequired(true)),
+                .setRequired(true))
+        .addAttachmentOption(option =>
+            option.setName('attachment')
+                .setDescription('送信する画像')),
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
@@ -39,18 +42,19 @@ module.exports = {
 
         const targetUser = interaction.options.getUser('target');
         const message = interaction.options.getString('message');
+        const attachment = interaction.options.getAttachment('attachment');
 
         // メッセージの判定
         if (message.includes('@everyone') || message.includes('@here')) {
             return interaction.editReply('メッセージに@everyoneまたは@hereを含めることはできません。');
         }
-        if (message.match(/<@&\d+>/) || message.match(/<@!\d+>/)) {
+        if (message.match(/<@&\d+>/) || message.match(/<@!\d+>/) || message.match(/<@?\d+>/)) {
             return interaction.editReply('メッセージにロールメンションまたはユーザーメンションを含めることはできません。');
         }
         if (message.length > 500) {
             return interaction.editReply('メッセージが500文字を超えています。');
         }
-        if (message.match(/(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/[^\s]+/)) {
+        if (message.match(/(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li|com\/invite)|discordapp\.com\/invite)\/[^\s]+/)) {
             return interaction.editReply('招待リンクを含むメッセージは送信できません。');
         }
 
@@ -67,7 +71,17 @@ module.exports = {
             });
 
             const webhookClient = new WebhookClient({ id: webhook.id, token: webhook.token });
-            await webhookClient.send(message);
+
+            const options = {
+                content: message,
+            };
+
+            // 画像が添付されている場合
+            if (attachment) {
+                options.files = [attachment];
+            }
+
+            await webhookClient.send(options);
 
             // ウェブフックの削除
             await webhook.delete('Spoofing message sent');
