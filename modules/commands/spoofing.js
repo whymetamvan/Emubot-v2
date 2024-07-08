@@ -77,12 +77,11 @@ module.exports = {
             return interaction.editReply('メッセージに連続するスポイラーを含めることはできません。');
         }
 
-        // ユーザーの名前とアイコンを取得
-        const member = interaction.guild.members.cache.get(targetUser.id);
-        const nickname = member ? member.nickname || targetUser.displayName : targetUser.displayName;
-        const avatarURL = targetUser.displayAvatarURL();
-
         try {
+            const member = await interaction.guild.members.fetch(targetUser.id);
+            const nickname = member ? member.nickname || targetUser.displayName : targetUser.displayName;
+            const avatarURL = member.displayAvatarURL();
+
             const webhook = await interaction.channel.createWebhook({
                 name: nickname,
                 avatar: avatarURL,
