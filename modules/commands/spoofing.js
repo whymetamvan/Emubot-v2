@@ -66,7 +66,7 @@ module.exports = {
 
         try {
             const member = await interaction.guild.members.fetch(targetUser.id);
-            const nickname = member ? member.nickname || targetUser.username : targetUser.username;
+            const nickname = member ? member.nickname || targetUser.displayName : targetUser.displayName;
             const avatarURL = member.displayAvatarURL({ format: null, size: 1024 });
 
             const webhook = await interaction.channel.createWebhook({
