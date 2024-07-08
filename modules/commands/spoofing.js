@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, PermissionsBitField, WebhookClient, Collection } = require('discord.js');
 
-const cooldowns = new Collection();
+const userCooldowns = new Collection();
+const serverCooldowns = new Collection();
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,10 +22,20 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         const userId = interaction.user.id;
+        const guildId = interaction.guild.id;
 
-        // クールダウンの確認
-        if (cooldowns.has(userId)) {
-            const expirationTime = cooldowns.get(userId) + 10000;
+        // サーバーのクールダウンの確認
+        if (serverCooldowns.has(guildId)) {
+            const expirationTime = serverCooldowns.get(guildId) + 3000;
+            if (Date.now() < expirationTime) {
+                const timeLeft = (expirationTime - Date.now()) / 1000;
+                return interaction.editReply(`サーバー全体のコマンドのクールダウン中です。あと${timeLeft.toFixed(1)}秒待ってください。`);
+            }
+        }
+
+        // ユーザーのクールダウンの確認
+        if (userCooldowns.has(userId)) {
+            const expirationTime = userCooldowns.get(userId) + 10000;
             if (Date.now() < expirationTime) {
                 const timeLeft = (expirationTime - Date.now()) / 1000;
                 return interaction.editReply(`コマンドのクールダウン中です。あと${timeLeft.toFixed(1)}秒待ってください。`);
@@ -32,8 +43,10 @@ module.exports = {
         }
 
         // クールダウン設定
-        cooldowns.set(userId, Date.now());
-        setTimeout(() => cooldowns.delete(userId), 10000);
+        userCooldowns.set(userId, Date.now());
+        serverCooldowns.set(guildId, Date.now());
+        setTimeout(() => userCooldowns.delete(userId), 10000);
+        setTimeout(() => serverCooldowns.delete(guildId), 3000);
 
         // botの権限確認
         if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
@@ -54,8 +67,14 @@ module.exports = {
         if (message.length > 500) {
             return interaction.editReply('メッセージが500文字を超えています。');
         }
-        if (message.match(/(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li|com\/invite)|discordapp\.com\/invite)\/[^\s]+/)) {
-            return interaction.editReply('招待リンクを含むメッセージは送信できません。');
+        if (message.match(/(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li|com\/invite)|discordapp\.com\/invite|dsc\.gg|imgur\.com)\/[^\s]+/)) {
+            return interaction.editReply('招待リンクやimgurリンクを含むメッセージは送信できません。');
+        }
+        if (message.match(/[\w-]{24}\.[\w-]{6}\.[\w-]{27}/)) {
+            return interaction.editReply('メッセージにトークンを含めることはできません。');
+        }
+        if (message.match(/\|{4,}/)) {
+            return interaction.editReply('メッセージに連続するスポイラーを含めることはできません。');
         }
 
         // ユーザーの名前とアイコンを取得
