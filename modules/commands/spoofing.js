@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, PermissionsBitField, WebhookClient, Collection } = require('discord.js');
 
-const userCooldowns = new Collection();
 const serverCooldowns = new Collection();
 
 module.exports = {
@@ -21,7 +20,6 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
-        const userId = interaction.user.id;
         const guildId = interaction.guild.id;
 
         // サーバーのクールダウンの確認
@@ -33,19 +31,8 @@ module.exports = {
             }
         }
 
-        // ユーザーのクールダウンの確認
-        if (userCooldowns.has(userId)) {
-            const expirationTime = userCooldowns.get(userId) + 10000;
-            if (Date.now() < expirationTime) {
-                const timeLeft = (expirationTime - Date.now()) / 1000;
-                return interaction.editReply(`コマンドのクールダウン中です。あと${timeLeft.toFixed(1)}秒待ってください。`);
-            }
-        }
-
         // クールダウン設定
-        userCooldowns.set(userId, Date.now());
         serverCooldowns.set(guildId, Date.now());
-        setTimeout(() => userCooldowns.delete(userId), 10000);
         setTimeout(() => serverCooldowns.delete(guildId), 3000);
 
         // botの権限確認
@@ -79,8 +66,8 @@ module.exports = {
 
         try {
             const member = await interaction.guild.members.fetch(targetUser.id);
-            const nickname = member ? member.nickname || targetUser.displayName : targetUser.displayName;
-            const avatarURL = member.displayAvatarURL();
+            const nickname = member ? member.nickname || targetUser.username : targetUser.username;
+            const avatarURL = member.displayAvatarURL({ format: null, size: 1024 });
 
             const webhook = await interaction.channel.createWebhook({
                 name: nickname,
