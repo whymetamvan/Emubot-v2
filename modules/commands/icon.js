@@ -11,29 +11,28 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    const { options, user } = interaction;
+    const { options, user, guild } = interaction;
 
-    // userのアバターURLを取得
     const targetUser = options.getUser('user') || user;
-    const avatarURL = targetUser.displayAvatarURL({
+
+    const guildMember = await guild.members.fetch(targetUser.id);
+    const avatarURL = guildMember.displayAvatarURL({
       format: 'png',
       size: 1024,
     });
 
-    // embedを送信
     const embed = new EmbedBuilder()
       .setTitle(`${targetUser.username}のアイコン`)
       .setImage(avatarURL)
       .setTimestamp()
-      .setFooter({ text: 'Emubot | icon'})
+      .setFooter({ text: 'Emubot | icon' })
       .setColor('#f8b4cb');
 
     try {
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
       console.error(error);
-      console.log('icon error');
-      await interaction.reply({ content:'エラーが発生しました', ephemeral: true})
+      await interaction.reply({ content: 'エラーが発生しました', ephemeral: true });
     }
   },
 };
