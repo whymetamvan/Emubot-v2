@@ -89,7 +89,26 @@ module.exports = {
             await webhookClient.send(options);
 
             // ウェブフックの削除
-            await webhook.delete('Spoofing message sent');
+            try {
+                await webhook.delete('Spoofing message sent');
+            } catch (deleteError) {
+                console.error('Error deleting webhook:', deleteError);
+                await interaction.editReply('メッセージを送信しましたが、webhookの削除に失敗しました。');
+
+                // 既存のwebhookを削除
+                const webhooks = await interaction.channel.fetchWebhooks();
+                const botWebhooks = webhooks.filter(wh => wh.owner.id === interaction.client.user.id);
+
+                for (const botWebhook of botWebhooks.values()) {
+                    try {
+                        await botWebhook.delete('Cleaning up leftover webhooks');
+                    } catch (cleanUpError) {
+                        console.error('Error cleaning up webhook:', cleanUpError);
+                    }
+                }
+
+                return;
+            }
 
             // 返信
             await interaction.editReply('メッセージを送信しました。');
