@@ -1,31 +1,54 @@
-const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
+// exchangerate-apiを使用するため、登録をしてください
+require('dotenv').config();
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('rate')
-        .setDescription('現在のUSD/JPYの為替レートを表示します'),
+        .setDescription('現在の為替レートを表示します。')
+        .addStringOption(option =>
+            option.setName('currency')
+                .setDescription('表示したい通貨ペアを選択してください')
+                .setRequired(true)
+                .addChoices(
+                    { name: 'ドル/円', value: 'USDJPY' },
+                    { name: 'ユーロ/円', value: 'EURJPY' }
+                )),
     async execute(interaction) {
         await interaction.deferReply();
+
+        // apiにポーン
+        const apiKey = process.env.exchangeAPI;
+        const currencyPair = interaction.options.getString('currency');
+        const apiUrl = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/${currencyPair.slice(0, 3)}`;
+
         try {
-            // データを取得
-            const response = await axios.get('https://svr242api.nakn.jp/rate.json');
-            const data = response.data;
+            const response = await axios.get(apiUrl);
+            const { data } = response;
 
-            const usdJpyRate = data.rate.USDJPY;
+            if (data.result !== 'success' || !data.conversion_rates || !data.conversion_rates.JPY) {
+                await interaction.editReply('為替レートの取得に失敗しました。後でもう一度お試しください。');
+                return;
+            }
 
-            // Embedを作成
-            const rateEmbed = new EmbedBuilder()
+            // embedほーい
+            const rate = data.conversion_rates.JPY;
+            const currencyName = currencyPair.slice(0, 3) === 'USD' ? 'ドル' : 'ユーロ';
+
+            const embed = new EmbedBuilder()
                 .setColor('#f8b4cb')
-                .setTitle('USD/JPY 為替レート')
-                .setDescription(`現在のUSD/JPYの為替レートは **${usdJpyRate}** です。`)
+                .setTitle(`${currencyName}/円 為替レート`)
+                .addFields(
+                    { name: `1 ${currencyName}`, value: `${rate} 円`, inline: true },
+                )
                 .setTimestamp()
-                .setFooter({ text: 'EmuBOT | rate' });
+                .setFooter({ text: 'EmuBOT | rate', iconURL: 'https://mpreview.aflo.com/UoR1jS55MseL/afloimagemart_163682654.jpg' });
 
-            await interaction.editReply({ embeds: [rateEmbed] });
+            await interaction.editReply({ embeds: [embed] });
         } catch (error) {
-            console.error('Error fetching the exchange rate:', error);
-            await interaction.editReply('為替レートの取得に失敗しました。');
+            console.error(error);
+            await interaction.editReply('エラーが発生しました。後でもう一度お試しください。');
         }
     },
 };
