@@ -14,7 +14,6 @@ module.exports = {
     async execute(interaction) {
 
         await interaction.deferReply();
-      // ドメインとAPIを取得、ip2whoisAPIに投げる
         const domain = interaction.options.getString('domain');
         const thumbnailPath = path.join(__dirname, '../../lib/images/whois.png');
         const ip2_API = process.env.ip_API;
@@ -23,7 +22,6 @@ module.exports = {
             const response = await axios.get(`https://api.ip2whois.com/v2?key=${ip2_API}&domain=${domain}`);
             const data = response.data;
 
-          // embedを送信
             const embed = new EmbedBuilder()
                 .setTitle(`WHOIS Lookup for ${domain}`)
                 .addFields(
@@ -36,7 +34,7 @@ module.exports = {
                 )
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text: "Emutest | whois"})
+                .setFooter({ text: 'Emutest | whois', iconURL:'https://play-lh.googleusercontent.com/wpvk25q3DH4Sx5q5a3Ux5ZbimMZ5U33vq-qnyOTrhL05CdD9apw_YzHfTI_BqJkbuw=w240-h480-rw' })
 .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
                 .setTimestamp();
 
