@@ -22,8 +22,6 @@ module.exports = {
 
   async execute(interaction) {
     if (interaction.commandName === "taiko") {
-
-      // オプションと数を取得
       const option = interaction.options.getString("action");
       const count = interaction.options.getInteger("count");
 
@@ -33,10 +31,10 @@ module.exports = {
 
       switch (option) {
         case "all":
-          dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'taiko', 'LEVEL10.txt');
+          dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'taiko', 'taiko ALL.txt');
           break;
         case "level10":
-          dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'taiko', 'taiko ALL.txt');
+          dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'taiko', 'LEVEL10.txt');
           break;
         default:
           await interaction.editReply("選択肢から選んでください：全曲、☆10のみ");
@@ -44,7 +42,6 @@ module.exports = {
       }
 
       try {
-        // ファイルの読み込み
         const rawData = fs.readFileSync(dataFilePath, 'utf8');
         const songList = rawData.split('\n').filter(song => song.trim() !== '');
 
@@ -57,7 +54,6 @@ module.exports = {
           return;
         }
 
-        // ランダム
         const selectedSongs = [];
         while (selectedSongs.length < count) {
           const randomIndex = Math.floor(Math.random() * songList.length);
@@ -67,12 +63,11 @@ module.exports = {
           }
         }
 
-        // embedの送信
         const embed = new EmbedBuilder()
           .setTitle(`ランダム選曲の結果 (${selectedSongs.length} 曲)`)
           .setDescription(selectedSongs.join("\n"))
           .setTimestamp()
-          .setFooter({ text:'Emubot | taiko'})
+          .setFooter({ text:'Emubot | taiko', iconURL: 'https://pbs.twimg.com/profile_images/501238914330271744/znFmAp9R_400x400.jpeg'})
           .setColor('#ff7c04');
 
         await interaction.editReply({ embeds: [embed] });
