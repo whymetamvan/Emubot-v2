@@ -5,16 +5,16 @@ const cheerio = require('cheerio');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('google')
-        .setDescription('Google search command')
+        .setDescription('Google検索を行います')
         .addStringOption(option => 
             option.setName('query')
-                .setDescription('The search query')
+                .setDescription('検索ワード')
                 .setRequired(true)
         ),
     async execute(interaction) {
         await interaction.deferReply();
         const query = interaction.options.getString('query');
-        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        const searchUrl = `https://www.google.co.jp/search?q=${encodeURIComponent(query)}`;
 
         try {
             const { data } = await axios.get(searchUrl, {
@@ -45,7 +45,7 @@ module.exports = {
                 .setTitle(`Google検索結果: ${query}`)
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text:'Emubot | google'})
+                .setFooter({ text:'Emubot | google', iconURL:'https://news.mynavi.jp/techplus/article/20150902-a202/index_images/index.jpg' })
             searchResults.forEach(result => {
                 embed.addFields({ name: result.title, value: result.link });
             });
