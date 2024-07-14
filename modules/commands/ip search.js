@@ -40,8 +40,8 @@ module.exports = {
                 )
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text: "Emutest | ip lookup"})
-                .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
+                .setFooter({ text: 'Emutest | ip lookup', iconURL:'https://png.pngtree.com/png-clipart/20230804/original/pngtree-ip-address-icon-www-push-net-vector-picture-image_9562164.png'})
+     .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
                 .setTimestamp();
 
         await interaction.editReply(
