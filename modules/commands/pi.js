@@ -45,6 +45,8 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor(0xf8b4cb)
                 .setTitle(`${decimals} 桁の円周率です！`)
+                .setTimestamp()
+                .setFooter({ text:'Emubot | pi', iconURL:'https://t11.pimg.jp/029/016/951/1/29016951.jpg' })
                 .setDescription(calculatedPiValue);
 
             await interaction.reply({ embeds: [embed] });
