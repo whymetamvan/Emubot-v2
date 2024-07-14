@@ -1,4 +1,3 @@
-// convert.js
 const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
 const path = require('path');
 
@@ -24,18 +23,15 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
-    // 変換する文字列とタイプを取得
     const type = interaction.options.getString('type');
     const text = interaction.options.getString('text');
     const conversionData = require(path.join(__dirname, '..', '..', 'lib', 'data', 'convert.json'));
 
-    // メンションを含む場合は処理を終了
     if (hasMention(text)) {
       await interaction.reply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
       return;
     }
 
-    // それぞれに対応するもので変換を行う
     let convertedText = '';
     switch (type) {
       case 'rune':
@@ -58,23 +54,20 @@ module.exports = {
         return;
     }
 
-    // Embedを送信
     const embed = new EmbedBuilder()
       .setColor('#f8b4cb')
       .setTitle('変換完了！')
-      .setDescription(`${type}に変換しました` + "\n" +'```\n' + `${convertedText}` + '\n```' ) 
-      .setTimestamp()
-      .setFooter({ text:'Emubot | convert'});
+    .setDescription(`${type}に変換しました` + "\n" +'```\n' + `${convertedText}` + '\n```' ) 
+    .setTimestamp()
+    .setFooter({ text:'Emubot | convert', iconURL:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4No8kzYwqTUgca_83uUhfOSJzFqbLaTM_VQJY1qbQ1m2szo_ZNEmilQfYNDEbW_a1SOo&usqp=CAU'});
     await interaction.reply({ embeds:[embed] });
   },
 };
 
-// メンションを含むかどうかの確認
 function hasMention(text) {
   return /<@!?(\d+)>/.test(text);
 }
 
-// lib/data/convert.jsonでの変換
 function convertText(text, conversionMap) {
   return text.toUpperCase()
     .split('')
@@ -82,7 +75,6 @@ function convertText(text, conversionMap) {
     .join('');
 }
 
-// アナグラム
 function anagram(text) {
   const chars = text.split('');
   for (let i = chars.length - 1; i > 0; i--) {
