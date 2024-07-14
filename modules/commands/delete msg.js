@@ -13,7 +13,7 @@ module.exports = {
         .setDescription('メッセージを削除したいユーザー')),
 
   async execute(interaction) {
-   // botとユーザーの権限の確認
+    // botとユーザーの権限の確認
     if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
       return interaction.reply({ content: 'あなたにメッセージ削除権限が有りません。', ephemeral: true });
     }
@@ -56,7 +56,7 @@ module.exports = {
         .setColor('#f8b4cb')
         .setTitle('削除完了！')
         .setTimestamp()
-        .setFooter({ text:'Emubot | Delete'})
+        .setFooter({ text:'Emubot | Delete', iconURL:'https://rakugakiicon.com/ri/wp-content/uploads/2015/06/27bdb42056ff1f4f0d57c83c096067f3.png'})
         .setDescription(`削除したメッセージ数: ${deletedMessages.size}`);
 
       await interaction.editReply({ embeds: [embed] });
