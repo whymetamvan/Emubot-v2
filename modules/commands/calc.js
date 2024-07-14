@@ -28,7 +28,7 @@ module.exports = {
       .setColor('#f8b4cb')
       .setTitle('Emubot | calculator')
       .setTimestamp()
-      .setFooter({ text:'Emubot | calc'})
+      .setFooter({ text:'Emubot | calc', iconURL:'https://cdn.icon-icons.com/icons2/294/PNG/256/Calculator_31111.png'})
 .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
       .setDescription('**計算できました！**'+'\n'+'```\n'+`${expression} = ${result}`+'```\n');
 
