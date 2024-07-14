@@ -40,7 +40,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setTimestamp()
-        .setFooter({ text:'Emubot | search-GIF'})
+        .setFooter({ text:'Emubot | search-GIF', iconURL:'https://play-lh.googleusercontent.com/ycHJqqNVtnAJbsnzHlDcTVlwcOhFygF8DmF_kCM8pkb8E6Fk9RFm8TjBARWnNiy0YD4=w240-h480-rw' })
         .setTitle(`${query}のGIFです！`)
         .setImage(gifUrl);
 
