@@ -11,7 +11,6 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
-    // 数を取得、2000以上の場合はエラー
     const length = interaction.options.getInteger('length');
 
     if (length > 2000) {
@@ -24,12 +23,11 @@ module.exports = {
     } else {
       const randomString = Array.from({ length }, () => Math.random().toString(36).charAt(2)).join("");
 
-      // embedを送信
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setTitle('ランダムな文字列')
         .setTimestamp()
-        .setFooter({ text:'Emubot | random'})
+        .setFooter({ text:'Emubot | random', iconURL:'https://media.istockphoto.com/id/1261074020/ja/ベクター/ミステリーボックスアイコンベクトルゲームやアプリのためのランダムな戦利品ボックスフラットベクトルアイコン.jpg?s=170667a&w=0&k=20&c=qNBV0-yzlAYYApY939oAmSGLM07DcoptmbHRU24Ggwk= })
         .setDescription('```\n' + randomString + '\n```');
 
       try {
