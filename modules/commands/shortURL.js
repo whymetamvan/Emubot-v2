@@ -13,7 +13,6 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
-      // URLとAPIキーの取得、xgd.APIに投げる
         const urlToShorten = interaction.options.getString('url');
         const apiKey = process.env.xgd_API;
         try {
@@ -21,13 +20,11 @@ module.exports = {
             if (response.status === 200 && response.data.status === 200) {
                 const Url = response.data.shorturl;
                 const shortenedUrl = `<${Url}>`;
-
-              // embedの送信
                 const embed = new EmbedBuilder()
                 .setDescription(`**[URL](${urlToShorten})を短縮化しました！**\n\n**短縮URL: ${shortenedUrl}**`)
                 .setTimestamp()
-                .setFooter({ text: "Emutest | shortURL"})
-                .setColor('#f8b4cb')
+                .setFooter({ text: 'Emutest | shortURL', iconURL:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpJRM9dYW0kYc3v7MgXiZLRcFt-OWD4kZk9Q&s' })
+                .setColor('#f8b4cb');
 
                 await interaction.editReply({ embeds:[embed] });
             } else {
