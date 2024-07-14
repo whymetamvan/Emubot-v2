@@ -1,227 +1,110 @@
 require('dotenv').config();
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');
-const FormData = require('form-data');
-const fs = require('fs');
-const path = require('path');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('check-virus')
-        .setDescription('URLやファイルの危険性を判断します')
-        .addStringOption(option =>
-            option.setName('type')
-                .setDescription('調べたいものを選択')
-                .setRequired(true)
-                .addChoices(
-                    { name: 'URL', value: 'url' },
-                    { name: 'File', value: 'file' },
-                ))
+        .setDescription('URLの危険性を判断します')
         .addStringOption(option =>
             option.setName('url')
                 .setDescription('URLを入力してください')
-                .setRequired(false))
-        .addAttachmentOption(option =>
-            option.setName('file')
-                .setDescription('ファイルをアップロードしてください')
-                .setRequired(false)),
+                .setRequired(true)),
     async execute(interaction) {
-        const type = interaction.options.getString('type');
+        const url = interaction.options.getString('url');
         const apiKey = process.env.VIRUSTOTAL_API_KEY;
 
-        if (type === 'url') {
-            const url = interaction.options.getString('url');
-            if (!url) {
-                return interaction.reply({ content: 'URLを入力してください', ephemeral: true });
+        if (!url) {
+            return interaction.reply({ content: 'URLを入力してください', ephemeral: true });
+        }
+
+        const embed = new EmbedBuilder()
+            .setTitle('URL Check')
+            .setDescription(`Checking the URL: ${url} <a:load:1259148838929961012>`)
+            .setColor(0x00FF00);
+
+        await interaction.reply({ embeds: [embed] });
+
+        try {
+            const encodedUrl = Buffer.from(url).toString('base64').replace(/=/g, '');
+            const response = await axios.get(`https://www.virustotal.com/api/v3/urls/${encodedUrl}`, {
+                headers: {
+                    'x-apikey': apiKey
+                }
+            });
+
+            const data = response.data;
+            if (!data || !data.data || !data.data.attributes || !data.data.attributes.last_analysis_results) {
+                throw new Error('Invalid response from VirusTotal API');
             }
 
-            const embed = new EmbedBuilder()
-                .setTitle('URL Check')
-                .setDescription(`Checking the URL: ${url} <a:load:1259148838929961012>`)
-                .setColor(0x00FF00);
+            const analysisResults = data.data.attributes.last_analysis_results;
+            const results = Object.keys(analysisResults).map(key => ({
+                engine: key,
+                result: analysisResults[key].result,
+                category: analysisResults[key].category
+            }));
 
-            await interaction.reply({ embeds: [embed] });
+            const detectedResults = results.filter(result => result.result !== 'clean' && result.result !== 'unrated');
+            const cleanResults = results.filter(result => result.result === 'clean');
+            const unratedResults = results.filter(result => result.result === 'unrated').slice(0, 5);
 
-            try {
-                const encodedUrl = Buffer.from(url).toString('base64').replace(/=/g, '');
-                const response = await axios.get(`https://www.virustotal.com/api/v3/urls/${encodedUrl}`, {
-                    headers: {
-                        'x-apikey': apiKey
-                    }
-                });
+            const descriptionSuffix = detectedResults.length >= 3 ? ' ⚠️' : detectedResults.length === 0 ? ' ✅' : '';
 
-                const data = response.data;
-                const analysisResults = data.data.attributes.last_analysis_results;
-                const results = Object.keys(analysisResults).map(key => ({
-                    engine: key,
-                    result: analysisResults[key].result,
-                    category: analysisResults[key].category
-                }));
+            const embedResult = new EmbedBuilder()
+                .setTitle('URL check completed!')
+                .setFooter({ text:'Emubot | check-virus', iconURL:'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/6c51b7ce-37c6-46e8-8a60-f77282a66f9c/dfq0c21-66386d21-3b27-47e7-808d-c9c03248549b.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzZjNTFiN2NlLTM3YzYtNDZlOC04YTYwLWY3NzI4MmE2NmY5Y1wvZGZxMGMyMS02NjM4NmQyMS0zYjI3LTQ3ZTctODA4ZC1jOWMwMzI0ODU0OWIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.ZkEMTvm821TYDactsf7ajI6AcUjzV5WuKW-EPd3Oj2k' })
+                .setDescription(`診断URL: ${url}${descriptionSuffix}`)
+                .setColor(detectedResults.length > 0 ? 0xFF0000 : 0x00FF00);
 
-                const detectedResults = results.filter(result => result.result !== 'clean' && result.result !== 'unrated');
-                const cleanResults = results.filter(result => result.result === 'clean');
-                const unratedResults = results.filter(result => result.result === 'unrated').slice(0, 5);
+            let totalFields = 0;
 
-                const descriptionSuffix = detectedResults.length >= 3 ? ' ⚠️' : detectedResults.length === 0 ? ' ✅' : '';
+            detectedResults.forEach(result => {
+                if (totalFields < 25) {
+                    embedResult.addFields(
+                        { name: result.engine, value: result.result || 'clean', inline: true }
+                    );
+                    totalFields++;
+                }
+            });
 
-                const embedResult = new EmbedBuilder()
-                    .setTitle('URL check completed!')
-                    .setDescription(`診断URL: ${url}${descriptionSuffix}`)
-                    .setColor(detectedResults.length > 0 ? 0xFF0000 : 0x00FF00);
+            cleanResults.forEach(result => {
+                if (totalFields < 25) {
+                    embedResult.addFields(
+                        { name: result.engine, value: result.result || 'clean', inline: true }
+                    );
+                    totalFields++;
+                }
+            });
 
-                let totalFields = 0;
+            unratedResults.forEach(result => {
+                if (totalFields < 25) {
+                    embedResult.addFields(
+                        { name: result.engine, value: result.result || 'unrated', inline: true }
+                    );
+                    totalFields++;
+                }
+            });
 
-                detectedResults.forEach(result => {
-                    if (totalFields < 25) {
-                        embedResult.addFields(
-                            { name: result.engine, value: result.result || 'clean', inline: true }
-                        );
-                        totalFields++;
-                    }
-                });
+            await interaction.editReply({ embeds: [embedResult] });
+        } catch (error) {
+            console.error(error);
 
-                cleanResults.forEach(result => {
-                    if (totalFields < 25) {
-                        embedResult.addFields(
-                            { name: result.engine, value: result.result || 'clean', inline: true }
-                        );
-                        totalFields++;
-                    }
-                });
-
-                unratedResults.forEach(result => {
-                    if (totalFields < 25) {
-                        embedResult.addFields(
-                            { name: result.engine, value: result.result || 'unrated', inline: true }
-                        );
-                        totalFields++;
-                    }
-                });
-
-                await interaction.editReply({ embeds: [embedResult] });
-            } catch (error) {
-                console.error(error);
-
-                const embedError = new EmbedBuilder()
-                    .setTitle('URLcheck error')
-                    .setDescription(`エラーが発生したURL: ${url}`)
-                    .setColor(0xFF0000);
-
-                await interaction.editReply({ embeds: [embedError] });
-            }
-        } else if (type === 'file') {
-            const file = interaction.options.getAttachment('file');
-            if (!file) {
-                return interaction.reply({ content: 'ファイルをアップロードしてください', ephemeral: true });
+            let errorMessage = 'エラーが発生しました。';
+            if (error.response && error.response.status === 404) {
+                errorMessage = '指定されたURLが見つかりませんでした。';
+            } else if (error.response && error.response.status === 401) {
+                errorMessage = 'APIキーが無効です。';
             }
 
-            const embed = new EmbedBuilder()
-                .setTitle('File Check')
-                .setDescription(`Checking this file...: ${file.name} <a:load:1259148838929961012>`)
-                .setColor(0x00FF00);
+            const embedError = new EmbedBuilder()
+                .setTitle('URLチェックエラー')
+                .setTimestamp()
+                .setFooter({ text:'Emubot | check-virus', iconURL:'https://www.svgrepo.com/show/331633/virustotal.svg' })
+                .setDescription(`エラーが発生したURL: ${url}\n${errorMessage}`)
+                .setColor(0xFF0000);
 
-            await interaction.reply({ embeds: [embed] });
-
-            try {
-                const filePath = path.join(__dirname, file.name);
-                const writer = fs.createWriteStream(filePath);
-
-                const response = await axios({
-                    url: file.url,
-                    method: 'GET',
-                    responseType: 'stream'
-                });
-
-                response.data.pipe(writer);
-
-                writer.on('finish', async () => {
-                    const form = new FormData();
-                    form.append('file', fs.createReadStream(filePath));
-
-                    const fileResponse = await axios.post('https://www.virustotal.com/api/v3/files', form, {
-                        headers: {
-                            'x-apikey': apiKey,
-                            ...form.getHeaders()
-                        }
-                    });
-
-                    const fileData = fileResponse.data;
-                    if (!fileData.data || !fileData.data.attributes || !fileData.data.attributes.last_analysis_results) {
-                        throw new Error('Unable to process file type');
-                    }
-
-                    const fileResults = fileData.data.attributes.last_analysis_results;
-                    const fileResultArray = Object.keys(fileResults).map(key => ({
-                        engine: key,
-                        result: fileResults[key].result,
-                        category: fileResults[key].category
-                    }));
-
-                    const detectedFileResults = fileResultArray.filter(result => result.result !== 'clean' && result.result !== 'unrated');
-                    const cleanFileResults = fileResultArray.filter(result => result.result === 'clean');
-                    const unratedFileResults = fileResultArray.filter(result => result.result === 'unrated').slice(0, 5);
-
-                    const descriptionSuffix = detectedFileResults.length >= 3 ? ' ⚠️' : detectedFileResults.length === 0 ? ' ✅' : '';
-
-                    const embedFileResult = new EmbedBuilder()
-                        .setTitle('File check completed!')
-                        .setDescription(`診断ファイル: ${file.name}${descriptionSuffix}`)
-                        .setColor(detectedFileResults.length > 0 ? 0xFF0000 : 0x00FF00);
-
-                    let totalFields = 0;
-
-                    detectedFileResults.forEach(result => {
-                        if (totalFields < 25) {
-                            embedFileResult.addFields(
-                                { name: result.engine, value: result.result || 'clean', inline: true }
-                            );
-                            totalFields++;
-                        }
-                    });
-
-                    cleanFileResults.forEach(result => {
-                        if (totalFields < 25) {
-                            embedFileResult.addFields(
-                                { name: result.engine, value: result.result || 'clean', inline: true }
-                            );
-                            totalFields++;
-                        }
-                    });
-
-                    unratedFileResults.forEach(result => {
-                        if (totalFields < 25) {
-                            embedFileResult.addFields(
-                                { name: result.engine, value: result.result || 'unrated', inline: true }
-                            );
-                            totalFields++;
-                        }
-                    });
-
-                    await interaction.editReply({ embeds: [embedFileResult] });
-                    fs.unlinkSync(filePath);
-                });
-
-                writer.on('error', (error) => {
-                    console.error(error);
-
-                    const embedError = new EmbedBuilder()
-                        .setTitle('File Check Error')
-                        .setDescription(`エラーが発生したファイル: ${file.name}`)
-                        .setColor(0xFF0000);
-
-                    interaction.editReply({ embeds: [embedError] });
-                    fs.unlinkSync(filePath);
-                });
-            } catch (error) {
-                console.error(error);
-
-                const embedError = new EmbedBuilder()
-                    .setTitle('File Check Error')
-                    .setDescription(`There was an error checking the file: ${file.name}`)
-                    .setColor(0xFF0000);
-
-                await interaction.editReply({ embeds: [embedError] });
-            }
+            await interaction.editReply({ embeds: [embedError] });
         }
     },
 };
