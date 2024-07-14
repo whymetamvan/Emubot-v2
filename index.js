@@ -1,39 +1,18 @@
-require('dotenv').config();
-const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js');
+// index.js
+const client = require('./clients');
+require('./modules/events/error');
+const miqEvent = require('./modules/events/miq');
+miqEvent(client);
+
+const { Collection } = require('discord.js');
 
 const fs = require('fs');
 const path = require('path');
-
-// intent
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds, 
-    GatewayIntentBits.GuildMembers, 
-    GatewayIntentBits.GuildEmojisAndStickers,
-    GatewayIntentBits.GuildIntegrations, 
-    GatewayIntentBits.GuildVoiceStates,
-    GatewayIntentBits.GuildPresences, 
-    GatewayIntentBits.GuildMessages, 
-    GatewayIntentBits.GuildMessageReactions,
-    GatewayIntentBits.DirectMessages, 
-    GatewayIntentBits.DirectMessageReactions, 
-    GatewayIntentBits.MessageContent
-  ],
-  partials: [
-    Partials.User, 
-    Partials.Channel, 
-    Partials.GuildMember, 
-    Partials.Message, 
-    Partials.Reaction
-  ]
-});
 
 // ログイン
 client.on('ready', () => {
     console.log(`${client.user.tag}、起動！`);
 });
-
-client.login(process.env.token);
 
 // コマンドを読み込む
 client.commands = new Collection();
@@ -55,33 +34,3 @@ for (const file of eventFiles) {
     }
 }
 
-// error
-// 未処理のPromiseの拒否をキャッチ
-const config = require('./lib/data/config.json');
-
-// 未処理のPromiseの拒否をキャッチ
-process.on('unhandledRejection', async (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  const logChannel = client.channels.cache.get(config.logChannelId);
-  if (logChannel) {
-    logChannel.send(`Unhandled Rejection at: ${promise}\nReason: ${reason}`);
-  }
-});
-
-// uncaughtExceptionをキャッチ
-process.on('uncaughtException', async (error) => {
-  console.error('Uncaught Exception:', error);
-  const logChannel = client.channels.cache.get(config.logChannelId);
-  if (logChannel) {
-    logChannel.send(`Uncaught Exception: ${error.message}`);
-  }
-});
-
-// Discordクライアントのエラーをキャッチ
-client.on('error', async (error) => {
-  console.error('Discord client error:', error);
-  const logChannel = client.channels.cache.get(config.logChannelId);
-  if (logChannel) {
-    logChannel.send(`Discord client error: ${error.message}`);
-  }
-});
