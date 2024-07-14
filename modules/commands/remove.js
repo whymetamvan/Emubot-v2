@@ -12,14 +12,12 @@ module.exports = {
     try {
       await interaction.deferReply();
 
-      // 画像の取得、remove.bgの制限上、pngとjpg以外はメッセージの送信
       const image = interaction.options.getAttachment('image');
 
       if (image.contentType !== 'image/png' && image.contentType !== 'image/jpeg') {
         return await interaction.editReply('webpはできないんだよね..\n[ここ](<https://www.iloveimg.com/ja>)でPNG形式に変換してやってみて！');
       }
 
-      // APIキーの取得、remove.bgAPIに投げる
       const apiKey = process.env.remove_API;
 
       const response = await axios.post('https://api.remove.bg/v1.0/removebg',
@@ -39,18 +37,17 @@ module.exports = {
       const buffer = Buffer.from(response.data, 'binary');
       const attachment = new AttachmentBuilder(buffer, { name: 'removebg.png' });
 
-      // embedを送信
-　　　const embed = new EmbedBuilder()
-　　　.setTitle('背景を透過しました')
-　　　.setColor(0xf8b4cb)
-　　　.setTimestamp()
-　　　.setFooter({ text: "Emutest | remove"})
-　　　.setImage('attachment://removebg.png');
+const embed = new EmbedBuilder()
+.setTitle('背景を透過しました')
+.setColor(0xf8b4cb)
+.setTimestamp()
+.setFooter({ text: 'Emutest | remove', iconURL:'https://play-lh.googleusercontent.com/4kF2IUQxdLs86iAVsmnHA1B34uO-dvtszKM8qzscc1InZb-2_JI0WANyOiWiV3qyNg=w240-h480-rw' })
+.setImage('attachment://removebg.png');
 
-　　　await interaction.editReply({ embeds: [embed], files: [attachment] });
-   　　 } catch (error) {
-    　　  console.error('画像の背景透過中にエラーが発生しました：', error);
-     　　 await interaction.editReply('エラーが発生しました');
-   　　 }
- 　　 },
-　　};
+await interaction.editReply({ embeds: [embed], files: [attachment] });
+    } catch (error) {
+      console.error('画像の背景透過中にエラーが発生しました：', error);
+      await interaction.editReply('エラーが発生しました');
+    }
+  },
+};
