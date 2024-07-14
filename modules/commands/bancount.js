@@ -7,7 +7,7 @@ module.exports = {
 
     async execute(interaction) {
         try {
-　　　　　　// botの権限の確認(ViewAuditLogであっているのだろうか..ここは微妙)
+            // botの権限の確認(ViewAuditLogであっているのだろうか..ここは微妙)
             if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ViewAuditLog)) {
                 return interaction.reply({ content: '監査ログの閲覧権限がありません', ephemeral: true });
             }
@@ -21,7 +21,7 @@ module.exports = {
                 .setColor('#f8b4cb')
                 .setTitle('Banned Users')
                 .setTimestamp()
-                .setFooter({ text:'Emubot | bancount'})
+                .setFooter({ text:'Emubot | bancount', iconURL: 'https://as1.ftcdn.net/v2/jpg/03/55/06/90/1000_F_355069022_M0gy4vn4R7jWQJB8E5Rrs6egHMkgBf2O.jpg'})
                 .setDescription(`このサーバーのBANユーザー数: ${bannedUsersCount}`);
 
             await interaction.reply({ embeds: [embed] });
