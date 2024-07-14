@@ -13,7 +13,6 @@ module.exports = {
         try {
             await interaction.deferReply(); 
 
-          // 生成数を取得、10以上の場合はエラー
             const quantity = interaction.options.getInteger('count');
 
             const countLimited = Math.min(quantity, 10);
@@ -22,11 +21,10 @@ module.exports = {
             }
             const nitroLinks = generateNitroLinks(countLimited);
 
-          // embedを送信 (Descriptionの絵文字は適宜変更)
             const embed = new EmbedBuilder()
                 .setColor('#f47fff')
                 .setTimestamp()
-                .setFooter({ text:'Emubot | fake nitro'})
+                .setFooter({ text:'Emubot | fake nitro', iconURL:'https://image.pngaaa.com/680/4213680-middle.png' })
                 .setDescription(`**Fake Nitro Gift Links** <a:nitronitronitro:1240815301801545789>\nNitroギフトリンク\n${nitroLinks.join('\n')}`);
 
             await interaction.editReply({ embeds: [embed] });
@@ -37,7 +35,6 @@ module.exports = {
     },
 };
 
-// fake nitroリンク生成
 function generateNitroLinks(quantity) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const nitroLinks = [];
