@@ -10,6 +10,8 @@ module.exports = {
         try {
             await interaction.deferReply();
             const thumbnailPath = path.join(__dirname, '../../lib/images/dice.gif');
+
+            // 1〜6でランダム
             const diceRoll = Math.floor(Math.random() * 6) + 1;
 
             // embedを送信
@@ -17,7 +19,7 @@ module.exports = {
                 .setColor('#f8b4cb')
                 .setTitle('サイコロ 🎲')
                 .setTimestamp()
-                  .setFooter({ text:'Emubot | dice'})
+                  .setFooter({ text:'Emubot | dice', iconURL:'https://cdn.icon-icons.com/icons2/1465/PNG/512/678gamedice_100992.png'})
 .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
                 .setDescription(`サイコロの目は \`${diceRoll}\` です！`);
 
