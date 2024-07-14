@@ -1,4 +1,3 @@
-// プロセカランダム選曲コマンド
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -23,7 +22,6 @@ module.exports = {
 
   async execute(interaction) {
     if (interaction.commandName === "prsk") {
-      // 曲数とオプションを取得
       const option = interaction.options.getString("action");
       const count = interaction.options.getInteger("count");
 
@@ -56,7 +54,6 @@ await interaction.deferReply();
           return;
         }
 
-        // ランダム
         const selectedSongs = [];
         while (selectedSongs.length < count) {
           const randomIndex = Math.floor(Math.random() * songList.length);
@@ -66,12 +63,11 @@ await interaction.deferReply();
           }
         }
 
-         // embedの送信
         const embed = new EmbedBuilder()
           .setTitle(`ランダム選曲の結果 (${selectedSongs.length} 曲)`)
           .setDescription(selectedSongs.join("\n"))
           .setTimestamp()
-          .setFooter({ text:'Emubot | prsk'})
+          .setFooter({ text:'Emubot | prsk', iconURL: 'https://pjsekai.sega.jp/assets/img/special/dl/sns_icon/icon_virtualsinger_1_miku.png'})
           .setColor('#34ccbc');
 
         await interaction.editReply({ embeds: [embed] });
