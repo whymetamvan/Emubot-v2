@@ -30,7 +30,6 @@ module.exports = {
     
     let dataFilePath;
 
-    // 選択
     switch (option) {
       case "all":
         dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'chunithm', 'chunithm ALL.txt');
@@ -77,7 +76,7 @@ module.exports = {
         .setTitle(`ランダム選曲の結果 (${selectedSongs.length} 曲)`)
         .setDescription(selectedSongs.join("\n"))
         .setTimestamp()
-        .setFooter({ text:'Emubot | chunithm'})
+        .setFooter({ text:'Emubot | chunithm', iconURL: 'https://pbs.twimg.com/profile_images/1735059307195256832/6YSNiEle_400x400.jpg'})
         .setColor('#fffc3c');
 
       await interaction.editReply({ embeds: [embed] });
