@@ -117,7 +117,6 @@ module.exports = {
                 { name: '**/mcserver**', value: 'マイクラのサーバーステータスと表示', inline: true },
                 { name: '**/rate**', value: 'USD / JPY', inline: true },
                 { name: '**/spoofing**', value: 'なりすまし', inline: true },
-                { name: '**/mcserver**', value: 'マイクラサーバー情報表示', inline: true },
                 { name: '**/dot**', value: 'ドット絵変換', inline: true },
                 { name: '**/urlchecker**', value: 'URLの危険性を判定', inline: true }
             )
