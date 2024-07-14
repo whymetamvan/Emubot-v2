@@ -24,6 +24,8 @@ module.exports = {
         const roles = role.toString(); 
         const embed = new EmbedBuilder()
             .setTitle('ロールを付与する')
+            .setTimestamp()
+            .setFooter({ text:'Emubot | verify', iconURL:'https://thumb.ac-illust.com/d3/d3d0ea283aff27e1fc47c9ba6f5508fc_t.jpeg' })
             .setDescription(`ボタンを押して ${roles} を取得します。`)
             .setColor(role.color);
 
