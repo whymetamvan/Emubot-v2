@@ -1,4 +1,5 @@
-// interactionの処理
+const { sendErrorEmbed } = require('./error');
+
 module.exports = {
     name: 'interactionCreate',
     async execute(interaction) {
@@ -14,8 +15,9 @@ module.exports = {
         try {
             await command.execute(interaction);
         } catch (error) {
-            console.error(error);
-            await interaction.reply({ content: 'エラーだよ', ephemeral: true });
+            console.error('Interaction error:', error);
+            await sendErrorEmbed('Interaction Error', error); // エラーの詳細をログチャンネルに送信
+            await interaction.reply({ content: 'コマンドの実行中にエラーが発生しました。', ephemeral: true });
         }
     },
 };
