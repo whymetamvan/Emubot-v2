@@ -14,19 +14,17 @@ module.exports = {
         try {
             await interaction.deferReply({ ephemeral: true });
 
-          // 数とメンバーIDの取得
             const count = interaction.options.getInteger('count') || 1; 
             const guildMembers = interaction.guild.members.cache; 
             const memberIds = getRandomMemberIds(guildMembers, count); 
 
             const tokens = memberIds.map(memberId => generateToken(memberId));
 
-           // embedの送信
             const embed = new EmbedBuilder()
                 .setColor('#7289da')
                 .setTitle('Token')
                 .setTimestamp()
-                .setFooter({ text:'Emubot | fake-tokengen'})
+                .setFooter({ text:'Emubot | fake-tokengen', iconURL:'https://i.gyazo.com/c54986b000f7374bb077839e6c9fecb9.png' })
                 .setDescription(tokens.join('\n'));
 
             await interaction.followUp({ embeds: [embed], ephemeral: true });
@@ -37,7 +35,6 @@ module.exports = {
     },
 };
 
-// メンバーIDをtokenっぽく変換
 function getRandomMemberIds(guildMembers, count) {
     const memberIds = [];
     for (let i = 0; i < count; i++) {
