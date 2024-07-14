@@ -24,11 +24,9 @@ module.exports = {
 async execute(interaction) {
   await interaction.deferReply();
 
-  // 文字列と言語を取得
   const text = interaction.options.getString('text');
   const targetLanguage = interaction.options.getString('language');
 
-  // メンションが含まれていれば終了
 if (hasMention(text)) {
   await interaction.editReply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
   return;
@@ -37,11 +35,10 @@ if (hasMention(text)) {
   try {
     const translatedText = await gasTranslate(text, 'ja', targetLanguage);
 
-    // embedの送信
     const embed = new EmbedBuilder()
       .setDescription('**翻訳しました！**'+'\n'+'```\n'+`${translatedText}`+'\n```')
       .setTimestamp()
-      .setFooter({ text:'Emubot | translate'})
+      .setFooter({ text:'Emubot | translate', iconURL:'https://cdn.icon-icons.com/icons2/56/PNG/512/googletranslaterafaga_11283.png' })
 .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
       .setColor('#f8b4cb');
     
@@ -54,12 +51,10 @@ if (hasMention(text)) {
   },
 };
 
-// メンションの確認
 function hasMention(text) {
   return /<@!?(\d+)>/.test(text);
 }
 
-// 翻訳のためのAPIに投げる
 function gasTranslate(text, source, target) {
   return axios.get(`https://script.google.com/macros/s/AKfycbweJFfBqKUs5gGNnkV2xwTZtZPptI6ebEhcCU2_JvOmHwM2TCk/exec`, {
     params: {
