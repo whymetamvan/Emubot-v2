@@ -31,7 +31,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text: 'Emubot | userinfo' })
+                .setFooter({ text: 'Emubot | userinfo', iconURL:'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png' })
                 .setTitle('ユーザー情報')
                 .setThumbnail(avatarURL)
                 .addFields(
