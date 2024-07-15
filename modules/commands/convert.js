@@ -53,6 +53,7 @@ module.exports = {
         await interaction.reply({ content: 'エラーが発生しました。', ephemeral: true });
         return;
     }
+    await interaction.deferReply();
 
     const embed = new EmbedBuilder()
       .setColor('#f8b4cb')
@@ -60,7 +61,7 @@ module.exports = {
     .setDescription(`${type}に変換しました` + "\n" +'```\n' + `${convertedText}` + '\n```' ) 
     .setTimestamp()
     .setFooter({ text:'Emubot | convert', iconURL:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4No8kzYwqTUgca_83uUhfOSJzFqbLaTM_VQJY1qbQ1m2szo_ZNEmilQfYNDEbW_a1SOo&usqp=CAU'});
-    await interaction.reply({ embeds:[embed] });
+    await interaction.editReply({ embeds:[embed] });
   },
 };
 
