@@ -37,14 +37,16 @@ module.exports = {
       const buffer = Buffer.from(response.data, 'binary');
       const attachment = new AttachmentBuilder(buffer, { name: 'removebg.png' });
 
-const embed = new EmbedBuilder()
-.setTitle('背景を透過しました')
-.setColor(0xf8b4cb)
-.setTimestamp()
-.setFooter({ text: 'Emutest | remove', iconURL:'https://play-lh.googleusercontent.com/4kF2IUQxdLs86iAVsmnHA1B34uO-dvtszKM8qzscc1InZb-2_JI0WANyOiWiV3qyNg=w240-h480-rw' })
-.setImage('attachment://removebg.png');
 
-await interaction.editReply({ embeds: [embed], files: [attachment] });
+      const embed = new EmbedBuilder()
+
+        .setTitle('背景を透過しました')
+        .setColor('#f8b4cb')
+        .setTimestamp()
+        .setFooter({ text: 'Emutest | remove', iconURL:'https://play-lh.googleusercontent.com/4kF2IUQxdLs86iAVsmnHA1B34uO-dvtszKM8qzscc1InZb-2_JI0WANyOiWiV3qyNg=w240-h480-rw' })
+        .setImage('attachment://removebg.png');
+
+      await interaction.editReply({ embeds: [embed], files: [attachment] });
     } catch (error) {
       console.error('画像の背景透過中にエラーが発生しました：', error);
       await interaction.editReply('エラーが発生しました');
