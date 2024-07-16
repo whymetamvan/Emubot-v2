@@ -7,6 +7,10 @@ module.exports = {
 
   async execute(interaction) {
     try {
+     if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+      return interaction.reply({ content: 'チャンネル管理権限がありません', ephemeral: true });
+        }
+      
       const create = new ButtonBuilder()
         .setCustomId('create')
         .setStyle(ButtonStyle.Primary)
