@@ -23,7 +23,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                 .setDescription(`**[URL](${urlToShorten})を短縮化しました！**\n\n**短縮URL: ${shortenedUrl}**`)
                 .setTimestamp()
-                .setFooter({ text: 'Emutest | shortURL', iconURL:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpJRM9dYW0kYc3v7MgXiZLRcFt-OWD4kZk9Q&s' })
+                .setFooter({ text: 'Emubot | shortURL', iconURL:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpJRM9dYW0kYc3v7MgXiZLRcFt-OWD4kZk9Q&s' })
                 .setColor('#f8b4cb');
 
                 await interaction.editReply({ embeds:[embed] });
