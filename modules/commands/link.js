@@ -17,7 +17,6 @@ module.exports = {
                 )
         ),
     async execute(interaction) {
-        // 権限チェック
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) && !interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
             return interaction.reply({ content: 'このコマンドを実行する権限がありません。', ephemeral: true });
         }
@@ -29,7 +28,6 @@ module.exports = {
         try {
             await interaction.deferReply({ ephemeral: true });
 
-            // 設定ファイルの読み込み
             if (fs.existsSync(SETTINGS_FILE)) {
                 try {
                     const data = fs.readFileSync(SETTINGS_FILE, 'utf8');
@@ -43,15 +41,12 @@ module.exports = {
 
             const currentStatus = settings[interaction.guild.id];
 
-            // すでに選択された状態の場合
             if (currentStatus === status) {
                 return interaction.followUp(`すでに${status ? 'ON' : 'OFF'}になっています。`);
             }
 
-            // 設定の更新
             settings[interaction.guild.id] = status;
 
-            // 設定ファイルの書き込み
             try {
                 fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf8');
             } catch (error) {
@@ -59,7 +54,6 @@ module.exports = {
                 return interaction.followUp({ content: '設定ファイルの保存中にエラーが発生しました。', ephemeral: true });
             }
 
-            // 返信
             await interaction.followUp(`メッセージリンクの展開は ${status ? 'ON' : 'OFF'} になりました。`);
         } catch (error) {
             console.error('予期しないエラーが発生しました:', error);
@@ -67,5 +61,3 @@ module.exports = {
         }
     },
 };
-
-
