@@ -17,12 +17,10 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral:true });
 
-      // 画像を取得
         const attachment = interaction.options.getAttachment('image');
         const imagePath = path.join(__dirname, attachment.name);
 
         try {
-          // アップロードされた画像をファイルとして一時保存
             const writer = fs.createWriteStream(imagePath);
             const response = await axios.get(attachment.url, { responseType: 'stream' });
             response.data.pipe(writer);
@@ -32,7 +30,6 @@ module.exports = {
                 writer.on('error', reject);
             });
 
-          // ファイルをフォームに追加、APIに投げる
             const form = new FormData();
             form.append('files', fs.createReadStream(imagePath));
 
@@ -42,13 +39,11 @@ module.exports = {
                     'Accept': 'application/json'
                 }
             });
-
         
             const uploadData = uploadResponse.data;
             if (uploadData.files && uploadData.files.length > 0) {
                 const imageUrl = uploadData.files[0].url;
 
-              // embedを送信
                 const embed = new EmbedBuilder()
                     .setColor(0xf8b4cb)
                     .setTitle('リンクに変換しました！')
