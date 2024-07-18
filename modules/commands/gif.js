@@ -24,6 +24,7 @@ module.exports = {
       }
     }
 
+    await interaction.deferReply();
     const apiKey = process.env.tenorAPI;
     const query = interaction.options.getString('query');
 
@@ -38,7 +39,6 @@ module.exports = {
         .setTitle(`${query}のGIFです！`)
         .setImage(gifUrl);
       
-      await interaction.deferReply();
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error('gif nai..');
