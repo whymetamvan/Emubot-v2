@@ -34,8 +34,8 @@ module.exports = {
                 )
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text: 'Emutest | whois', iconURL:'https://play-lh.googleusercontent.com/wpvk25q3DH4Sx5q5a3Ux5ZbimMZ5U33vq-qnyOTrhL05CdD9apw_YzHfTI_BqJkbuw=w240-h480-rw' })
-.setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
+                .setFooter({ text: 'Emubot | whois', iconURL:'https://play-lh.googleusercontent.com/wpvk25q3DH4Sx5q5a3Ux5ZbimMZ5U33vq-qnyOTrhL05CdD9apw_YzHfTI_BqJkbuw=w240-h480-rw' })
+                .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
                 .setTimestamp();
 
           await interaction.editReply(
