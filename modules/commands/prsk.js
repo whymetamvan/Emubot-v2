@@ -18,63 +18,52 @@ module.exports = {
     .addIntegerOption(option =>
       option.setName('count')
         .setDescription('選択する曲の数を指定します。')
-        .setRequired(true)),
+        .setRequired(true)
+    ),
 
   async execute(interaction) {
-    if (interaction.commandName === "prsk") {
-      const option = interaction.options.getString("action");
-      const count = interaction.options.getInteger("count");
+    const option = interaction.options.getString("action");
+    const count = interaction.options.getInteger("count");
+    const dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'prsk', `${option.toUpperCase()}.txt`);
 
-await interaction.deferReply();
-      
-      let dataFilePath;
+    await interaction.deferReply();
 
-      switch (option) {
-        case "master":
-          dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'prsk', 'MASTER.txt');
-          break;
-        case "append":
-          dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'prsk', 'APPEND.txt');
-          break;
-        default:
-          await interaction.editReply("選択肢から選んでください：MASTER、APPEND");
-          return;
+    if (!['master', 'append'].includes(option)) {
+      await interaction.editReply("選択肢から選んでください：MASTER、APPEND");
+      return;
+    }
+
+    try {
+      const songList = fs.readFileSync(dataFilePath, 'utf8').split('\n').filter(song => song.trim() !== '');
+
+      if (songList.length === 0) {
+        await interaction.editReply("曲が見つかりませんでした。");
+        return;
+      }
+      if (count < 1 || count > songList.length) {
+        await interaction.editReply("曲数は1以上、曲リストの総数以下で指定してください。");
+        return;
       }
 
-      try {
-        const rawData = fs.readFileSync(dataFilePath, 'utf8');
-        const songList = rawData.split('\n').filter(song => song.trim() !== '');
-
-        if (songList.length === 0) {
-          await interaction.editReply("曲が見つかりませんでした。");
-          return;
+      const selectedSongs = [];
+      while (selectedSongs.length < count) {
+        const randomSong = songList[Math.floor(Math.random() * songList.length)];
+        if (!selectedSongs.includes(randomSong)) {
+          selectedSongs.push(randomSong);
         }
-        if (count < 1 || count > songList.length) {
-          await interaction.editReply("曲数は1以上、曲リストの総数以下で指定してください。");
-          return;
-        }
-
-        const selectedSongs = [];
-        while (selectedSongs.length < count) {
-          const randomIndex = Math.floor(Math.random() * songList.length);
-          const randomSong = songList[randomIndex];
-          if (!selectedSongs.includes(randomSong)) {
-            selectedSongs.push(randomSong);
-          }
-        }
-
-        const embed = new EmbedBuilder()
-          .setTitle(`ランダム選曲の結果 (${selectedSongs.length} 曲)`)
-          .setDescription(selectedSongs.join("\n"))
-          .setTimestamp()
-          .setFooter({ text:'Emubot | prsk', iconURL: 'https://pjsekai.sega.jp/assets/img/special/dl/sns_icon/icon_virtualsinger_1_miku.png'})
-          .setColor('#34ccbc');
-
-        await interaction.editReply({ embeds: [embed] });
-      } catch (error) {
-        console.error(error);
-        await interaction.editReply({ content: 'エラーが発生しました。', ephemeral: true });
       }
+
+      const embed = new EmbedBuilder()
+        .setTitle(`ランダム選曲の結果 (${selectedSongs.length} 曲)`)
+        .setDescription(selectedSongs.join("\n"))
+        .setTimestamp()
+        .setFooter({ text: 'Emubot | prsk', iconURL: 'https://pjsekai.sega.jp/assets/img/special/dl/sns_icon/icon_virtualsinger_1_miku.png' })
+        .setColor('#34ccbc');
+
+      await interaction.editReply({ embeds: [embed] });
+    } catch (error) {
+      console.error(error);
+      await interaction.editReply({ content: 'エラーが発生しました。', ephemeral: true });
     }
   }
 };
