@@ -17,8 +17,8 @@ module.exports = {
                 .setColor('#f8b4cb')
                 .setTitle('サイコロ 🎲')
                 .setTimestamp()
-                  .setFooter({ text:'Emubot | dice', iconURL:'https://cdn.icon-icons.com/icons2/1465/PNG/512/678gamedice_100992.png'})
-.setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
+                .setFooter({ text:'Emubot | dice', iconURL:'https://cdn.icon-icons.com/icons2/1465/PNG/512/678gamedice_100992.png'})
+                .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
                 .setDescription(`サイコロの目は \`${diceRoll}\` です！`);
 
             await interaction.editReply({ embeds: [embed],files: [{attachment:thumbnailPath,name:path.basename(thumbnailPath)}] });
