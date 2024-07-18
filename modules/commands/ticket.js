@@ -7,10 +7,7 @@ module.exports = {
 
   async execute(interaction) {
     try {
-     if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-      return interaction.reply({ content: 'チャンネル管理権限がありません', ephemeral: true });
-        }
-      
+      await interaction.deferReply();
       const create = new ButtonBuilder()
         .setCustomId('create')
         .setStyle(ButtonStyle.Primary)
@@ -18,15 +15,17 @@ module.exports = {
 
       const embed1 = new EmbedBuilder()
         .setColor('#f8b4cb')
+        .setTimestamp()
+        .setFooter({ text:'Emubot | ticket', iconURL: interaction.client.user.displayAvatarURL() })
         .setDescription('チケットを作成するには下のボタンを押してください');
 
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [embed1],
         components: [new ActionRowBuilder().addComponents(create)],
       });
     } catch (error) {
       console.error('ticket error', error);
-      await interaction.reply({ content: 'エラーが発生しました。', ephemeral: true });
+      await interaction.editReply('エラーが発生しました。もう一度お試しください。');
     }
   },
 };
