@@ -1,4 +1,3 @@
-// ランダムに文字列を生成するコマンド
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
@@ -22,12 +21,14 @@ module.exports = {
       }
     } else {
       const randomString = Array.from({ length }, () => Math.random().toString(36).charAt(2)).join("");
+    
+      const bot = interaction.client.user;
 
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setTitle('ランダムな文字列')
         .setTimestamp()
-        .setFooter({ text:'Emubot | random', iconURL:'https://media.istockphoto.com/id/1261074020/ja/ベクター/ミステリーボックスアイコンベクトルゲームやアプリのためのランダムな戦利品ボックスフラットベクトルアイコン.jpg?s=170667a&w=0&k=20&c=qNBV0-yzlAYYApY939oAmSGLM07DcoptmbHRU24Ggwk= })
+        .setFooter({ text:'Emubot | random', iconURL: bot.displayAvatarURL() })
         .setDescription('```\n' + randomString + '\n```');
 
       try {
