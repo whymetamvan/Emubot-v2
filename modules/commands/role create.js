@@ -32,6 +32,8 @@ module.exports = {
         return interaction.reply({ content: 'ロールの作成上限のため、実行できませんでした。', ephemeral: true });
       }
 
+      await interaction.deferReply();
+
       let roleColor;
       if (color) {
         roleColor = color.toUpperCase();
@@ -51,11 +53,10 @@ module.exports = {
         .setFooter({ text:'Emubot | role create', iconURL: interaction.client.user.displayAvatarURL() })
         .setDescription(`作成したロール: <@&${createdRole.id}>`);
 
-      await interaction.deferReply();
-      await interaction.reply({ embeds: [embed] });
+      await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error(error);
-      await interaction.reply('エラーが発生しました。ロールの作成に失敗しました。');
+      await interaction.editReply('エラーが発生しました。ロールの作成に失敗しました。');
     }
   },
 };
