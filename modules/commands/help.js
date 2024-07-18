@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const buttonPages = require("../events/pagination");
+const cooldowns = new Map();
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -7,22 +8,34 @@ module.exports = {
         .setDescription('ヘルプを表示します。'),
 
     async execute(interaction) {
+
+        if (cooldowns.has(interaction.guildId)) {
+          const cooldown = cooldowns.get(interaction.guildId);
+          const now = Date.now();
+          if (cooldown > now) {
+            const remainingTime = Math.ceil((cooldown - now) / 1000); 
+            await interaction.reply({ content: `クールダウン中です。\nあと${remainingTime} 秒後にもう一度やってね！`, ephemeral: true });
+            return;
+          }
+        }
+
+        const bot = interaction.client.user;
+
         const embed1 = new EmbedBuilder()
             .setColor(0xf8b4cb)
             .setTitle('えむbot｜help')
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: 'えむbotについて', value: '暇な音ゲーマーの作ってる謎多機能botです' },
-                { name: 'このメッセージ', value: 'このhelpは放置してると一定期間後に自動で消えます' },
-                { name: 'botの便利機能', value: 'メッセージリンクの自動展開\nbotのメンションでMake it a quote画像を生成' },
-                { name: 'お知らせチャンネルについて', value: 'えむbot開発室というチャンネルでお知らせを行います。\n作成されていない場合は**/announce create**で作成してください\n作成できない場合は手動でお願いします()' },
-                { name: 'サポート等', value: '[twitter](https://twitter.com/ryo_001339)  [Discord](https://discord.gg/j2gM7d2Drp)  [Github](https://github.com/VEDA00133912/Emubot-discord.js-v14/tree/main)' }
+                { name: 'helpの操作方法', value: 'ボタンを押すことでコマンド一覧等が見れます' },
+                { name: 'お知らせチャンネルについて', value: 'えむbot開発室というチャンネルでお知らせを行います。\n作成されていない場合は**/announce create**で作成してください' },
+                { name: 'サポート等', value: '[twitter](https://twitter.com/ryo_001339)  [Discord](https://discord.gg/j2gM7d2Drp)  [Github](https://github.com/VEDA00133912/Emubot-discord.js-v14/tree/main)  [サイト](htpps://https://emubot.glitch.me/index.html)' }
             );
 
         const embed2 = new EmbedBuilder()
             .setTitle("えむbot｜help")
             .setDescription("コマンド一覧（1）")
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: '**/help**', value: 'help(これ)を表示', inline: true },
                 { name: '**/announce**', value: 'お知らせチャンネルの作成', inline: true },
@@ -37,7 +50,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (2)')
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: '**/translate**', value: '日本語を翻訳します\n(英、中、韓、露)', inline: true },
                 { name: '**/youtube-play**', value: 'ボイスチャンネルで指定したYoutube動画の再生', inline: true },
@@ -52,7 +65,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (3)')
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: '**/nitrogen**', value: 'フェイクNitroギフトリンクの生成', inline: true },
                 { name: '**/tokengen**', value: 'フェイクtokenの生成', inline: true },
@@ -67,7 +80,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (4)')
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: '**/prime**', value: '素数判定', inline: true },
                 { name: '**/qr**', value: 'QRコード生成', inline: true },
@@ -82,7 +95,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (5)')
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: '**/userinfo**', value: 'ユーザー情報の表示', inline: true },
                 { name: '**/kongyo**', value: 'コンギョを送信', inline: true },
@@ -97,7 +110,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (6)')
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: '**/random**', value: 'ランダムな英数字生成', inline: true },
                 { name: '**/google**', value: 'Google検索を行います', inline: true },
@@ -112,17 +125,22 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (7)')
-            .setFooter({ text:'Emubot | help', iconURL:'https://royalblossom.nl/img/878735.jpg' })
+            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
             .addFields(
                 { name: '**/mcserver**', value: 'マイクラのサーバーステータスと表示', inline: true },
                 { name: '**/rate**', value: 'USD / JPY', inline: true },
                 { name: '**/spoofing**', value: 'なりすまし', inline: true },
-                { name: '**/dot**', value: 'ドット絵変換', inline: true },
-                { name: '**/urlchecker**', value: 'URLの危険性を判定', inline: true }
+                { name: '**/urlchecker**', value: 'URLの危険性を判定', inline: true },
+                { name: '**/dot**', value: 'ドット絵に変換', inline: true },
+                { name: '**/ticket**', value: 'プライベートチャンネルを作成', inline: true }
             )
             .setColor(0xf8b4cb);
         
         const pages = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8];
         await buttonPages(interaction, pages);
+
+        const cooldownTime = 20000; 
+        cooldowns.set(interaction.guildId, Date.now() + cooldownTime);
+        setTimeout(() => cooldowns.delete(interaction.guildId), cooldownTime);
     },
 };
