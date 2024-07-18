@@ -15,6 +15,7 @@ module.exports = {
             return interaction.reply({ content: '画像がアップロードされていません', ephemeral: true });
         }
 
+        await interaction.deferReply();
         const imageUrl = attachment.url;
         const apiUrl = `https://pixel-image.vercel.app/api?image=${encodeURIComponent(imageUrl)}&size=4&k=8`;
 
@@ -29,7 +30,6 @@ module.exports = {
                 .setImage(resultImageUrl)
                 .setTimestamp();
 
-            await interaction.deferReply();
             await interaction.editReply({ embeds: [embed] });
         } catch (error) {
             console.error(error);
