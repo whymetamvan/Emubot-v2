@@ -34,7 +34,7 @@ module.exports = {
 
       if (action === 'generate') {
         if (!url) {
-          await interaction.editReply({ content: 'QRコードに変換したいURLを入力してください。', ephemeral: true });
+          await interaction.editReply('QRコードに変換したいURLを入力してください。');
           return;
         }
 
@@ -49,7 +49,7 @@ module.exports = {
         await interaction.editReply({ embeds: [embed], ephemeral: true });
       } else if (action === 'read') {
         if (!file) {
-          await interaction.editReply({ content: 'QRコードの画像をアップロードしてください。', ephemeral: true });
+          await interaction.editReply('QRコードの画像をアップロードしてください。');
           return;
         }
 
@@ -70,7 +70,7 @@ module.exports = {
 
           await interaction.editReply({ embeds: [embed], ephemeral: true });
         } else {
-          await interaction.editReply({ content: 'QRコードの読み取りに失敗しました。画像が正しいか確認してください。', ephemeral: true });
+          await interaction.editReply('QRコードの読み取りに失敗しました。画像が正しいか確認してください。');
         }
       }
     } catch (error) {
