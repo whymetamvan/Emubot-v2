@@ -24,7 +24,6 @@ module.exports = {
 
         console.log('Checking cooldown for guild:', guildId);
 
-        // クールダウン
         if (serverCooldowns.has(guildId)) {
             const expirationTime = serverCooldowns.get(guildId) + 5000; 
             if (Date.now() < expirationTime) {
@@ -34,7 +33,6 @@ module.exports = {
             }
         }
 
-        // botの権限確認
         if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
             return interaction.editReply('webhookの管理権限がありません');
         }
@@ -43,7 +41,6 @@ module.exports = {
         const message = interaction.options.getString('message');
         const attachment = interaction.options.getAttachment('attachment');
 
-        // メッセージの判定
         if (message.includes('@everyone') || message.includes('@here')) {
             return interaction.editReply('メッセージに@everyoneまたは@hereを含めることはできません。');
         }
@@ -80,21 +77,18 @@ module.exports = {
                 content: message,
             };
 
-            // 画像が添付されている場合
             if (attachment) {
                 options.files = [attachment];
             }
 
             await webhookClient.send(options);
 
-            // ウェブフックの削除
             try {
                 await webhook.delete('Spoofing message sent');
             } catch (deleteError) {
                 console.error('Error deleting webhook:', deleteError);
                 await interaction.editReply('メッセージを送信しましたが、webhookの削除に失敗しました。');
 
-                // 既存のwebhookを削除
                 const webhooks = await interaction.channel.fetchWebhooks();
                 const botWebhooks = webhooks.filter(wh => wh.owner.id === interaction.client.user.id);
 
@@ -109,8 +103,7 @@ module.exports = {
                 return;
             }
 
-            // クールダウン設定
-            console.log('Setting cooldown for guild:', guildId);
+¥            console.log('Setting cooldown for guild:', guildId);
             serverCooldowns.set(guildId, Date.now());
             setTimeout(() => {
                 console.log('Removing cooldown for guild:', guildId);
