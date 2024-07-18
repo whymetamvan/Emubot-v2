@@ -26,10 +26,8 @@ module.exports = {
     const count = interaction.options.getInteger("count");
     const dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'prsk', `${option.toUpperCase()}.txt`);
 
-    await interaction.deferReply();
-
     if (!['master', 'append'].includes(option)) {
-      await interaction.editReply("選択肢から選んでください：MASTER、APPEND");
+      await interaction.reply({ content:"選択肢から選んでください：```MASTER、APPEND```", ephemeral: true });
       return;
     }
 
@@ -37,13 +35,14 @@ module.exports = {
       const songList = fs.readFileSync(dataFilePath, 'utf8').split('\n').filter(song => song.trim() !== '');
 
       if (songList.length === 0) {
-        await interaction.editReply("曲が見つかりませんでした。");
+        await interaction.reply({ content:"曲が見つかりませんでした。", ephemeral: true });
         return;
       }
       if (count < 1 || count > songList.length) {
-        await interaction.editReply("曲数は1以上、曲リストの総数以下で指定してください。");
+        await interaction.reply({ content:"曲数は1以上、曲リストの総数以下で指定してください。", ephemeral: true });
         return;
       }
+
 
       const selectedSongs = [];
       while (selectedSongs.length < count) {
@@ -60,6 +59,7 @@ module.exports = {
         .setFooter({ text: 'Emubot | prsk', iconURL: 'https://pjsekai.sega.jp/assets/img/special/dl/sns_icon/icon_virtualsinger_1_miku.png' })
         .setColor('#34ccbc');
 
+      await interaction.deferReply();
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error(error);

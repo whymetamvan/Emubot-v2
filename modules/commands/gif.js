@@ -14,7 +14,6 @@ module.exports = {
         .setRequired(true)),
   async execute(interaction) {
 
-    // クールダウン中の処理
     if (cooldowns.has(interaction.guildId)) {
       const cooldown = cooldowns.get(interaction.guildId);
       const now = Date.now();
@@ -25,32 +24,27 @@ module.exports = {
       }
     }
 
-    // apiキーと検索ワードの取得
     const apiKey = process.env.tenorAPI;
     const query = interaction.options.getString('query');
 
-    await interaction.deferReply();
-
     try {
-      // tenorAPIに投げる
       const response = await axios.get(`https://tenor.googleapis.com/v2/search?q=${query}&key=${apiKey}&random=true`);
       const gifUrl = response.data.results[0].media_formats.gif.url;
 
-      // embedを送信
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setTimestamp()
         .setFooter({ text:'Emubot | search-GIF', iconURL:'https://play-lh.googleusercontent.com/ycHJqqNVtnAJbsnzHlDcTVlwcOhFygF8DmF_kCM8pkb8E6Fk9RFm8TjBARWnNiy0YD4=w240-h480-rw' })
         .setTitle(`${query}のGIFです！`)
         .setImage(gifUrl);
-
+      
+      await interaction.deferReply();
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error('gif nai..');
       await interaction.editReply('GIFが見つかりませんでした');
     }
 
-    // 15秒のクールダウンの設定
     const cooldownTime = 15000; 
     cooldowns.set(interaction.guildId, Date.now() + cooldownTime);
     setTimeout(() => cooldowns.delete(interaction.guildId), cooldownTime);

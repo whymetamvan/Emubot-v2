@@ -25,7 +25,7 @@ module.exports = {
       .setTitle(`${targetUser.username}のアイコン`)
       .setImage(avatarURL)
       .setTimestamp()
-      .setFooter({ text: 'Emubot | icon', iconURL:'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png' })
+      .setFooter({ text: 'Emubot | icon', iconURL: interaction.client.user.displayAvatarURL() })
       .setColor('#f8b4cb');
 
     try {

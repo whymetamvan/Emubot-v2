@@ -10,7 +10,6 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         try {
-            // ユーザーを取得、見つからなかったときの返答
             const user = interaction.options.getUser('user');
 
             if (!user) {
@@ -24,14 +23,12 @@ module.exports = {
                 console.log('ユーザーはサーバーのメンバーではありません');
             }
 
-            // アバターURLの取得
             const avatarURL = member ? member.displayAvatarURL({ size: 1024 }) : user.displayAvatarURL({ size: 1024 });
 
-            // embedを送信
             const embed = new EmbedBuilder()
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text: 'Emubot | userinfo', iconURL:'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png' })
+                .setFooter({ text: 'Emubot | userinfo', iconURL: interaction.client.user.displayAvatarURL() })
                 .setTitle('ユーザー情報')
                 .setThumbnail(avatarURL)
                 .addFields(
@@ -41,21 +38,21 @@ module.exports = {
                     { name: 'プロフィール', value: `<@${user.id}>`, inline:true }
                 );
 
-            if (member) { // メンバーの場合
+            if (member) {
                 embed.addFields(
                     { name: 'サーバー参加日', value: member.joinedAt ? `${member.joinedAt.toLocaleString('ja-JP')}` : '不明' }
                 );
-            } else { // メンバーではない場合
+            } else { 
                 embed.addFields(
                     { name: 'サーバー参加日', value: '未参加' }
                 );
             }
 
-            if (user.bot) { // botの場合
+            if (user.bot) { 
                 embed.addFields(
                     { name: 'AccountType', value: 'BOT 🤖' }
                 );
-            } else { // botではない(ユーザー)の場合
+            } else { 
                 embed.addFields(
                     { name: 'AccountType', value: 'USER <:user:1254362184272707676>', inline: true }
                 );

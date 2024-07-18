@@ -15,10 +15,8 @@ module.exports = {
 
     async execute(interaction) {
         try {
-            // 桁の取得
             const decimals = interaction.options.getInteger('decimals');
 
-            // クールダウン中、1000以上の場合の処理
             if (cooldowns.has(interaction.user.id)) {
                 const expirationTime = cooldowns.get(interaction.user.id);
                 if (Date.now() < expirationTime) {
@@ -41,7 +39,6 @@ module.exports = {
 
             const calculatedPiValue = calculatePi(piValue, decimals);
 
-            // embedの送信
             const embed = new EmbedBuilder()
                 .setColor(0xf8b4cb)
                 .setTitle(`${decimals} 桁の円周率です！`)

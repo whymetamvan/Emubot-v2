@@ -16,7 +16,7 @@ module.exports = {
       const embed1 = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setTimestamp()
-        .setFooter({ text:'Emubot | ticket', iconURL: interaction.client.user.displayAvatarURL() })
+        .setFooter({ name:'Emubot | ticket', iconURL: interaction.client.user.displayAvatarURL() })
         .setDescription('チケットを作成するには下のボタンを押してください');
 
       await interaction.editReply({

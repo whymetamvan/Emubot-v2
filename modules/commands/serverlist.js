@@ -8,20 +8,17 @@ module.exports = {
         try {
             await interaction.deferReply({ ephemeral: true});
 
-            // 参加サーバーを取得
             const guilds = interaction.client.guilds.cache.map(guild => guild.name);
             const guildCount = guilds.length;
 
-            // 2列に分けるための処理
             const half = Math.ceil(guilds.length / 2);
             const guildsFirstHalf = guilds.slice(0, half);
             const guildsSecondHalf = guilds.slice(half);
 
-            // embedを作成
             const embed = new EmbedBuilder()
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text: "Emutest | serverlist" })
+                .setFooter({ text: 'Emubot | serverlist', iconURL: interaction.client.user.displayAvatarURL() })
                 .setTitle(`サーバー一覧（現在: ${guildCount}）`)
                 .addFields(
                     { name: 'list1', value: guildsFirstHalf.join('\n'), inline: true },

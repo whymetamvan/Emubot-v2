@@ -13,7 +13,6 @@ module.exports = {
         .setDescription('メッセージを削除したいユーザー')),
 
   async execute(interaction) {
-    // botとユーザーの権限の確認
     if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
       return interaction.reply({ content: 'あなたにメッセージ削除権限が有りません。', ephemeral: true });
     }
@@ -22,34 +21,28 @@ module.exports = {
     }
     await interaction.deferReply({ ephemeral: true });
 
-    // 削除する数を取得(もしuserが指定されていれば取得)
     const count = interaction.options.getInteger('count');
     const user = interaction.options.getUser('user');
     const channel = interaction.channel;
 
-    // 100以上だった場合
     if (count > 100) {
       return interaction.editReply({ content: '一度に削除できるメッセージ数は 100 件までです。', ephemeral: true });
     }
 
     try {
-      // メッセージを取得
       const messages = await channel.messages.fetch({ limit: count });
       const userMessages = user ? messages.filter(m => m.author.id === user.id) : messages;
       
-      // 指定されたユーザーが見つからなかった場合
       if (userMessages.size === 0) {
         return interaction.editReply({ content: 'ユーザーが見つかりません。', ephemeral: true });
       }
 
-      // bulkDeleteの制限上2週間以上前のメッセージがある場合は削除しない
       const twoWeeksAgo = Date.now() - 1209600000; 
       const oldMessages = userMessages.filter(m => m.createdTimestamp < twoWeeksAgo);
       if (oldMessages.size > 0) {
         return interaction.editReply({ content: '2週間以上前のメッセージは削除できません。', ephemeral: true });
       }
 
-      // 削除し、Embedを送信
       const deletedMessages = await channel.bulkDelete(userMessages.first(count), true);
 
       const embed = new EmbedBuilder()

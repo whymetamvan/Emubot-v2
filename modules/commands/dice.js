@@ -11,10 +11,8 @@ module.exports = {
             await interaction.deferReply();
             const thumbnailPath = path.join(__dirname, '../../lib/images/dice.gif');
 
-            // 1〜6でランダム
             const diceRoll = Math.floor(Math.random() * 6) + 1;
 
-            // embedを送信
             const embed = new EmbedBuilder()
                 .setColor('#f8b4cb')
                 .setTitle('サイコロ 🎲')

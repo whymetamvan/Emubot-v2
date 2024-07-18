@@ -1,4 +1,3 @@
-// Yahoonの制限上、EUサーバーからでは使えません
 const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -7,7 +6,7 @@ const cooldowns = new Map();
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('yahoonews')
+        .setName('yahoo')
         .setDescription('ランダムなYahooニュースリンクを取得します'),
 
     async execute(interaction) {
@@ -15,7 +14,6 @@ module.exports = {
         const currentTime = Date.now();
         const cooldownAmount = 2 * 60 * 1000; 
 
-      // クールダウン中の処理
         if (cooldowns.has(guildId)) {
             const expirationTime = cooldowns.get(guildId) + cooldownAmount;
             if (currentTime < expirationTime) {
@@ -28,7 +26,6 @@ module.exports = {
 
         await interaction.deferReply();
 
-      // yahoo.co.jpからニュースリンクを取得
         const url = 'https://www.yahoo.co.jp/';
 
         try {
@@ -47,7 +44,6 @@ module.exports = {
                     return interaction.editReply({ content: '埋め込みリンクを送信する権限がありません。', ephemeral: true });
                 }
 
-              // 取得したリンクを送信
                 await interaction.editReply({ content: randomLink });
             } else {
                 await interaction.editReply('ニュースが見つかりません');

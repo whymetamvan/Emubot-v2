@@ -133,7 +133,7 @@ module.exports = {
                 { name: '**/ticket**', value: 'プライベートチャンネルを作成', inline: true }
             )
             .setColor(0xf8b4cb);
-        
+
         const pages = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8];
         await buttonPages(interaction, pages);
 

@@ -22,18 +22,17 @@ module.exports = {
 
         const guildId = interaction.guild.id;
 
-        // サーバーのクールダウンの確認
+        console.log('Checking cooldown for guild:', guildId);
+
+        // クールダウン
         if (serverCooldowns.has(guildId)) {
-            const expirationTime = serverCooldowns.get(guildId) + 3000;
+            const expirationTime = serverCooldowns.get(guildId) + 5000; 
             if (Date.now() < expirationTime) {
                 const timeLeft = (expirationTime - Date.now()) / 1000;
-                return interaction.editReply(`サーバー全体のコマンドのクールダウン中です。あと${timeLeft.toFixed(1)}秒待ってください。`);
+                console.log(`Cooldown active. Time left: ${timeLeft.toFixed(1)} seconds`);
+                return interaction.editReply(`コマンドのクールダウン中です。あと${timeLeft.toFixed(1)}秒待ってください。`);
             }
         }
-
-        // クールダウン設定
-        serverCooldowns.set(guildId, Date.now());
-        setTimeout(() => serverCooldowns.delete(guildId), 3000);
 
         // botの権限確認
         if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
@@ -110,7 +109,14 @@ module.exports = {
                 return;
             }
 
-            // 返信
+            // クールダウン設定
+            console.log('Setting cooldown for guild:', guildId);
+            serverCooldowns.set(guildId, Date.now());
+            setTimeout(() => {
+                console.log('Removing cooldown for guild:', guildId);
+                serverCooldowns.delete(guildId);
+            }, 5000); 
+
             await interaction.editReply('メッセージを送信しました。');
         } catch (error) {
             console.error('Error creating or sending webhook:', error);

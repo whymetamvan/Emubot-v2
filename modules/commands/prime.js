@@ -10,10 +10,8 @@ module.exports = {
         .setRequired(true)),
   async execute(interaction) {
     try {
-      //　数を取得
       const number = interaction.options.getInteger('number');
 
-      // 素数かどうかの判定
       let isPrime = true;
 
       if (number <= 1) {
@@ -27,12 +25,11 @@ module.exports = {
         }
       }
 
-      // embedを送信(グロタンディーク素数{57}の場合は特殊処理)
       const embed = new EmbedBuilder()
         .setColor(0xf8b4cb)
         .setTitle('素数判定結果')
         .setTimestamp()
-        .setFooter({ text:'Emubot | prime', iconURL:'https://cdn-icons-png.freepik.com/512/8068/8068172.png' })
+        .setFooter({ text:'Emubot | prime', iconURL: interaction.client.user.displayAvatarURL() })
         .addFields(
           { name: '入力された数', value: number.toString() },
           { name: '結果', value: isPrime ? '素数です' : number === 57 ? '[グロタンディーク素数](<https://dic.nicovideo.jp/a/グロタンディーク素数>)です' : '素数ではないです' },

@@ -7,14 +7,12 @@ module.exports = {
     .setName('serverinfo')
     .setDescription('サーバー情報の表示'),
   async execute(interaction) {
-    // それぞれ情報の取得
     const guild = interaction.guild;
     const serverIconUrl = guild.iconURL({ size: 1024 });
     const textChannelsCount = guild.channels.cache.filter(c => c.type === 0).size;
     const voiceChannelsCount = guild.channels.cache.filter(c => c.type === 2).size;
     const categoryChannelsCount = guild.channels.cache.filter(c => c.type === 4).size;
 
-    // もしサーバーアイコンがない場合はlib/images/none.pngを使用
     const thumbnailPath = path.join(__dirname, '../../lib/images/none.png');
     let thumbnailUrl;
     let file;
@@ -26,11 +24,10 @@ module.exports = {
       thumbnailUrl = serverIconUrl;
     }
 
-    // embedを送信
     const embed = new EmbedBuilder()
-      .setColor(0xf8b4cb)
+      .setColor('#f8b4cb')
       .setTimestamp()
-      .setFooter({ text: "Emutest | serverinfo"})
+      .setFooter({ text: 'Emubot | serverinfo', iconURL: interaction.client.user.displayAvatarURL() })
       .setThumbnail(thumbnailUrl)
       .addFields(
         { name: "サーバー名", value: `${guild.name}` },

@@ -3,10 +3,9 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('ping'),
+    .setDescription('ping値の測定'),
   async execute(interaction) {
 
-    // embedの送信
     const embed = new EmbedBuilder()
       .setColor('#f8b4cb')
       .setTitle('Emubot｜ping 🏓')

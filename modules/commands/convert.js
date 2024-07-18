@@ -64,14 +64,13 @@ module.exports = {
         await interaction.reply({ content: 'エラーが発生しました。', ephemeral: true });
         return;
     }
-    const bot = interaction.client.user;
 
     const embed = new EmbedBuilder()
       .setColor('#f8b4cb')
       .setTitle('変換完了！')
       .setDescription('```'+convertedText+'```')
       .setTimestamp()
-      .setFooter({ text: 'Emubot | convert', iconURL: bot.displayAvatarURL() });
+      .setFooter({ text: 'Emubot | convert', iconURL: interaction.client.user.displayAvatarURL()  });
 
     await interaction.deferReply();
     await interaction.editReply({ embeds: [embed] });

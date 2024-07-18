@@ -45,7 +45,7 @@ module.exports = {
                 .setTitle(`Google検索結果: ${query}`)
                 .setColor('#f8b4cb')
                 .setTimestamp()
-                .setFooter({ text:'Emubot | google', iconURL:'https://news.mynavi.jp/techplus/article/20150902-a202/index_images/index.jpg' })
+                .setFooter({ text:'Emubot | google', iconURL: interaction.client.user.displayAvatarURL() })
             searchResults.forEach(result => {
                 embed.addFields({ name: result.title, value: result.link });
             });

@@ -10,11 +10,9 @@ module.exports = {
                 .setDescription('画像をアップロード')
                 .setRequired(true)),
     async execute(interaction) {
-        await interaction.deferReply();
-
         const attachment = interaction.options.getAttachment('image');
         if (!attachment) {
-            return interaction.editReply({ content: '画像がアップロードされていません', ephemeral: true });
+            return interaction.reply({ content: '画像がアップロードされていません', ephemeral: true });
         }
 
         const imageUrl = attachment.url;
@@ -27,10 +25,11 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle('ドット絵に変換しました！')
                 .setTimestamp()
-                .setFooter({ text: 'Emubot | dot'})
+                .setFooter({ text: 'Emubot | dot', iconURL: interaction.client.user.displayAvatarURL() })
                 .setImage(resultImageUrl)
                 .setTimestamp();
 
+            await interaction.deferReply();
             await interaction.editReply({ embeds: [embed] });
         } catch (error) {
             console.error(error);

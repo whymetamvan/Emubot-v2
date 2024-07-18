@@ -13,25 +13,25 @@ module.exports = {
     await interaction.deferReply();
     try {
       const userId = interaction.user.id;
+      const now = new Date();
+      const jstNow = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
 
-      // おみくじ、embedの送信
-      if (!dailyFortunes.has(userId) || !isToday(dailyFortunes.get(userId))) {
+      if (!dailyFortunes.has(userId) || !isSameJapaneseDay(dailyFortunes.get(userId).date, jstNow)) {
         let result = '';
         do {
-          // 特別なおみくじの出る確率を低く設定
           const random = Math.random();
-          if (random < 0.01) { // 1%の確率で「わんだほーい！」が出る
+          if (random < 0.01) { 
             result = specialFortune;
           } else {
             result = fortunes[Math.floor(Math.random() * fortunes.length)];
           }
-        } while (dailyFortunes.get(userId) === result); 
+        } while (dailyFortunes.get(userId)?.result === result); 
 
         const embed = new EmbedBuilder()
           .setTitle('おみくじ結果')
           .setDescription(`今日の<@${interaction.user.id}>は **${result}** だよ！\nまた明日引いてね！`)
           .setTimestamp()
-          .setFooter({ text:'Emubot | omikuji', iconURL:'https://tsukatte.com/wp-content/uploads/2021/10/omikuji.png' })
+          .setFooter({ text: 'Emubot | omikuji', iconURL: 'https://tsukatte.com/wp-content/uploads/2021/10/omikuji.png' })
           .setThumbnail(`attachment://${result === specialFortune ? 'special.png' : 'omikuji.png'}`)
           .setColor('#f8b4cb');
 
@@ -43,8 +43,7 @@ module.exports = {
           }]
         });
 
-        // 1日1回だけ使えるようにする
-        dailyFortunes.set(userId, new Date());
+        dailyFortunes.set(userId, { result, date: jstNow });
       } else {
         await interaction.editReply('またあした引いてください！');
       }
@@ -58,9 +57,8 @@ module.exports = {
 const thumbnailPath = path.join(__dirname, '../../lib/images/omikuji.png');
 const specialThumbnailPath = path.join(__dirname, '../../lib/images/special.png');
 
-function isToday(date) {
-  const today = new Date();
-  return date.getDate() === today.getDate() &&
-         date.getMonth() === today.getMonth() &&
-         date.getFullYear() === today.getFullYear();
+function isSameJapaneseDay(date1, date2) {
+  return date1.getDate() === date2.getDate() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getFullYear() === date2.getFullYear();
 }

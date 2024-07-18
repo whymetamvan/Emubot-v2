@@ -38,7 +38,6 @@ module.exports = {
           return;
         }
 
-        // URLをQRコードに変換
         const embed = new EmbedBuilder()
           .setColor('#f8b4cb')
           .setTitle('QRコードにしました！')
@@ -54,7 +53,6 @@ module.exports = {
           return;
         }
 
-        // QRコードをURLに変換
         const apiUrl = `https://api.qrserver.com/v1/read-qr-code/?fileurl=${encodeURIComponent(file.url)}`;
 
         const response = await axios.get(apiUrl);

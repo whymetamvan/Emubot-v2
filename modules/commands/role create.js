@@ -16,7 +16,6 @@ module.exports = {
     ),
   async execute(interaction) {
     try {
-      // メンバーとbotの権限の確認
       if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
         return interaction.reply({ content: 'あなたにロールを管理する権限がありません。', ephemeral: true });
       }
@@ -24,7 +23,6 @@ module.exports = {
         return interaction.reply({ content: 'このサーバーでロールを管理する権限がありません。', ephemeral: true });
       }
 
-      // 名前と色の取得、ロールが250の場合はエラー
       const name = interaction.options.getString('name');
       const color = interaction.options.getString('color');
 
@@ -34,7 +32,6 @@ module.exports = {
         return interaction.reply({ content: 'ロールの作成上限のため、実行できませんでした。', ephemeral: true });
       }
 
-      // ロールカラーが設定されていない場合はデフォルトの#99AAB5に設定
       let roleColor;
       if (color) {
         roleColor = color.toUpperCase();
@@ -42,20 +39,19 @@ module.exports = {
         roleColor = '#99AAB5';
       }
 
-      // ロールの作成
       const createdRole = await interaction.guild.roles.create({
         name: name,
         color: roleColor,
       });
 
-      // Embedの送信
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setTitle('作成完了!')
         .setTimestamp()
-        .setFooter({ text:'Emubot | role create'})
+        .setFooter({ text:'Emubot | role create', iconURL: interaction.client.user.displayAvatarURL() })
         .setDescription(`作成したロール: <@&${createdRole.id}>`);
 
+      await interaction.deferReply();
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
       console.error(error);

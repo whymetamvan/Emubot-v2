@@ -1,5 +1,3 @@
-// 為替の取得にexchangerateAPIを使用するので登録をしてキーを取得してください
-// 日経平均株価の取得はyahoo-financeを使用するので npm install yahoo-finance2 をしてください
 require('dotenv').config();
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const axios = require('axios');

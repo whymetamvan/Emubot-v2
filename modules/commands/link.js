@@ -5,7 +5,7 @@ const SETTINGS_FILE = path.join(__dirname, '..', '..', 'lib', 'data', 'msglink.j
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('メッセージ自動展開')
+        .setName('メッセージの自動展開')
         .setDescription('メッセージリンクの展開をオンまたはオフにします。')
         .addStringOption(option =>
             option.setName('on-off')
