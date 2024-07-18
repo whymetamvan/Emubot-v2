@@ -19,12 +19,10 @@ module.exports = {
           }
         }
 
-        const bot = interaction.client.user;
-
         const embed1 = new EmbedBuilder()
             .setColor(0xf8b4cb)
             .setTitle('えむbot｜help')
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: 'えむbotについて', value: '暇な音ゲーマーの作ってる謎多機能botです' },
                 { name: 'helpの操作方法', value: 'ボタンを押すことでコマンド一覧等が見れます' },
@@ -35,7 +33,7 @@ module.exports = {
         const embed2 = new EmbedBuilder()
             .setTitle("えむbot｜help")
             .setDescription("コマンド一覧（1）")
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/help**', value: 'help(これ)を表示', inline: true },
                 { name: '**/announce**', value: 'お知らせチャンネルの作成', inline: true },
@@ -50,7 +48,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (2)')
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/translate**', value: '日本語を翻訳します\n(英、中、韓、露)', inline: true },
                 { name: '**/youtube-play**', value: 'ボイスチャンネルで指定したYoutube動画の再生', inline: true },
@@ -65,7 +63,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (3)')
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/nitrogen**', value: 'フェイクNitroギフトリンクの生成', inline: true },
                 { name: '**/tokengen**', value: 'フェイクtokenの生成', inline: true },
@@ -80,7 +78,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (4)')
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/prime**', value: '素数判定', inline: true },
                 { name: '**/qr**', value: 'QRコード生成', inline: true },
@@ -95,7 +93,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (5)')
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/userinfo**', value: 'ユーザー情報の表示', inline: true },
                 { name: '**/kongyo**', value: 'コンギョを送信', inline: true },
@@ -110,7 +108,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (6)')
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/random**', value: 'ランダムな英数字生成', inline: true },
                 { name: '**/google**', value: 'Google検索を行います', inline: true },
@@ -125,7 +123,7 @@ module.exports = {
             .setColor(0xee99ff)
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (7)')
-            .setFooter({ text:'Emubot | help', iconURL: bot.displayAvatarURL() })
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/mcserver**', value: 'マイクラのサーバーステータスと表示', inline: true },
                 { name: '**/rate**', value: 'USD / JPY', inline: true },
