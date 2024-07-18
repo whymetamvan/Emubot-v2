@@ -51,7 +51,7 @@ module.exports = {
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/translate**', value: '日本語を翻訳します\n(英、中、韓、露)', inline: true },
-                { name: '**/youtube-play**', value: 'ボイスチャンネルで指定したYoutube動画の再生', inline: true },
+                { name: '**/spoofing**', value: '別の人物へのなりすまし', inline: true },
                 { name: '**/ping**', value: 'ping値の表示', inline: true },
                 { name: '**/メッセージの自動展開**', value: 'デフォでオンになっているので', inline: true },
                 { name: '**/convert**', value: '文字列の変換', inline: true },
@@ -127,7 +127,6 @@ module.exports = {
             .addFields(
                 { name: '**/mcserver**', value: 'マイクラのサーバーステータスと表示', inline: true },
                 { name: '**/rate**', value: 'USD / JPY', inline: true },
-                { name: '**/spoofing**', value: 'なりすまし', inline: true },
                 { name: '**/urlchecker**', value: 'URLの危険性を判定', inline: true },
                 { name: '**/dot**', value: 'ドット絵に変換', inline: true },
                 { name: '**/ticket**', value: 'プライベートチャンネルを作成', inline: true }
