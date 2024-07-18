@@ -21,33 +21,36 @@ module.exports = {
                    { name:"韓国語", value:"ko" },
                    { name:"ロシア語", value:"ru" })
     ),
-async execute(interaction) {
-  await interaction.deferReply();
+  
+  async execute(interaction) {
 
-  const text = interaction.options.getString('text');
-  const targetLanguage = interaction.options.getString('language');
+    const text = interaction.options.getString('text');
+    const targetLanguage = interaction.options.getString('language');
 
-if (hasMention(text)) {
-  await interaction.editReply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
-  return;
-}
-  const thumbnailPath = path.join(__dirname, '../../lib/images/translate.png');
-  try {
+    if (hasMention(text)) {
+      await interaction.editReply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
+      return;
+    }
+    
+    await interaction.deferReply();
+    const thumbnailPath = path.join(__dirname, '../../lib/images/translate.png');
+  
+    try {
     const translatedText = await gasTranslate(text, 'ja', targetLanguage);
 
     const embed = new EmbedBuilder()
       .setDescription('**翻訳しました！**'+'\n'+'```\n'+`${translatedText}`+'\n```')
       .setTimestamp()
       .setFooter({ text:'Emubot | translate', iconURL:'https://cdn.icon-icons.com/icons2/56/PNG/512/googletranslaterafaga_11283.png' })
-.setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
+      .setThumbnail(`attachment://${path.basename(thumbnailPath)}`)
       .setColor('#f8b4cb');
     
-  await interaction.editReply(
-    { embeds: [embed],files: [{attachment:thumbnailPath,name:path.basename(thumbnailPath)}] });
-  } catch (error) {
-    console.error(error);
-    await interaction.editReply({ content:'翻訳エラーが発生しました', ephemeral:true });
-}
+      await interaction.editReply({ embeds: [embed],files: [{attachment:thumbnailPath,name:path.basename(thumbnailPath)}] });
+ 
+    } catch (error) {
+      console.error(error);
+      await interaction.editReply('翻訳エラーが発生しました');
+    }
   },
 };
 
@@ -68,4 +71,3 @@ function gasTranslate(text, source, target) {
     throw error;
   });
 }
-
