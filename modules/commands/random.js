@@ -21,21 +21,19 @@ module.exports = {
       }
     } else {
       const randomString = Array.from({ length }, () => Math.random().toString(36).charAt(2)).join("");
-    
-      const bot = interaction.client.user;
 
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setTitle('ランダムな文字列')
         .setTimestamp()
-        .setFooter({ text:'Emubot | random', iconURL: bot.displayAvatarURL() })
+        .setFooter({ text:'Emubot | random', iconURL: interaction.client.user.displayAvatarURL() })
         .setDescription('```\n' + randomString + '\n```');
 
       try {
         await interaction.reply({ embeds: [embed] });
       } catch (error) {
         console.error(error);
-　　　　　await interaction.reply({ content: 'エラーが発生しました', ephemeral: true});
+await interaction.reply({ content: 'エラーが発生しました', ephemeral: true});
       }
     }
   },
