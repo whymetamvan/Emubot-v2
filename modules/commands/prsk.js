@@ -31,6 +31,8 @@ module.exports = {
       return;
     }
 
+      await interaction.deferReply();
+
     try {
       const songList = fs.readFileSync(dataFilePath, 'utf8').split('\n').filter(song => song.trim() !== '');
 
@@ -42,7 +44,6 @@ module.exports = {
         await interaction.reply({ content:"曲数は1以上、曲リストの総数以下で指定してください。", ephemeral: true });
         return;
       }
-
 
       const selectedSongs = [];
       while (selectedSongs.length < count) {
