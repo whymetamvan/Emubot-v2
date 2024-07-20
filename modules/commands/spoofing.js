@@ -22,13 +22,10 @@ module.exports = {
 
         const guildId = interaction.guild.id;
 
-        console.log('Checking cooldown for guild:', guildId);
-
         if (serverCooldowns.has(guildId)) {
             const expirationTime = serverCooldowns.get(guildId) + 5000; 
             if (Date.now() < expirationTime) {
                 const timeLeft = (expirationTime - Date.now()) / 1000;
-                console.log(`Cooldown active. Time left: ${timeLeft.toFixed(1)} seconds`);
                 return interaction.editReply(`コマンドのクールダウン中です。あと${timeLeft.toFixed(1)}秒待ってください。`);
             }
         }
@@ -103,10 +100,8 @@ module.exports = {
                 return;
             }
 
-¥            console.log('Setting cooldown for guild:', guildId);
             serverCooldowns.set(guildId, Date.now());
             setTimeout(() => {
-                console.log('Removing cooldown for guild:', guildId);
                 serverCooldowns.delete(guildId);
             }, 5000); 
 
