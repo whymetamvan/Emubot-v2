@@ -23,16 +23,15 @@ module.exports = {
         return interaction.reply({ content: 'このサーバーでロールを管理する権限がありません。', ephemeral: true });
       }
 
+      await interaction.deferReply();
       const name = interaction.options.getString('name');
       const color = interaction.options.getString('color');
 
       const roleCount = interaction.guild.roles.cache.size;
 
       if (roleCount >= 250) {
-        return interaction.reply({ content: 'ロールの作成上限のため、実行できませんでした。', ephemeral: true });
+        return interaction.editReply('ロールの作成上限のため、実行できませんでした。');
       }
-
-      await interaction.deferReply();
 
       let roleColor;
       if (color) {
