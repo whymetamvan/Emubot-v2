@@ -11,6 +11,7 @@ module.exports = {
                 return interaction.reply({ content: '監査ログの閲覧権限がありません', ephemeral: true });
             }
 
+            await interaction.deferReply();
             const bannedUsers = await interaction.guild.bans.fetch();
             const bannedUsersCount = bannedUsers.size;
 
@@ -21,10 +22,10 @@ module.exports = {
                 .setFooter({ text:'Emubot | bancount', iconURL: interaction.client.user.displayAvatarURL() })
                 .setDescription(`このサーバーのBANユーザー数: ${bannedUsersCount}`);
 
-            await interaction.reply({ embeds: [embed] });
+            await interaction.editReply({ embeds: [embed] });
         } catch (error) {
             console.error(error);
-            await interaction.reply({ content: 'エラーが発生しました。', ephemeral: true });
+            await interaction.editReply('エラーが発生しました。');
         }
     },
 };
