@@ -58,7 +58,7 @@ module.exports = {
         .setTitle(`ランダム選曲の結果 (${selectedSongs.length} 曲)`)
         .setDescription(selectedSongs.join("\n"))
         .setTimestamp()
-        .setFooter({ text: 'Emubot | maimai', iconURL: 'https://maimaidx.jp/maimai-mobile/apple-touch-icon.png' })
+        .setFooter({ text: 'Emubot | maimai', iconURL: 'https://pbs.twimg.com/profile_images/1270188881581756419/7hrfPNnB_400x400.jpg' })
         .setColor('#58bcf4');
 
       await interaction.editReply({ embeds: [embed] });
