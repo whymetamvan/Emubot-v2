@@ -16,10 +16,11 @@ module.exports = {
             return interaction.reply({ content: 'チャンネルの作成権限がありません。', ephemeral: true });
         }
 
+        await interaction.deferReply();
         const existingChannel = guild.channels.cache.find(channel => channel.name === channelName && channel.type === ChannelType.GuildText);
 
         if (existingChannel) {
-            await interaction.reply({ content: 'えむbot開発室は既にあります', ephemeral: true });
+            await interaction.editReply('えむbot開発室は既にあります');
         } else {　
             try {
                 const createdChannel = await guild.channels.create({
@@ -34,7 +35,6 @@ module.exports = {
                   .setFooter({ text:'Emubot | announce-create', iconURL: 'https://png.pngtree.com/png-vector/20240507/ourlarge/pngtree-announcement-icon-megaphone-vector-illustration-png-image_12366388.png'});
                 
                 console.log(`${createdChannel.id}を作成`);
-                await interaction.deferReply();
                 await interaction.editReply({ embeds:[embed]});
             } catch (error) {
                 console.error('アナウンスの作成エラー', error);
