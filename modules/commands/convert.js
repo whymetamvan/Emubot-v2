@@ -12,13 +12,13 @@ module.exports = {
         .setDescription('変換タイプを選択します。')
         .setRequired(true)
         .addChoices(
-          { name: "rune文字", value: "rune" },
-          { name: "フェニキア文字", value: "phoenicia" },
-          { name: "ヒエログリフ", value: "hieroglyphs" },
-          { name: "逆読み", value: "reverse" },
-          { name: "アナグラム", value: "anagram" },
-          { name: "ﾒﾝﾍﾗ文生成", value: "genhera" },
-          { name: "怪しい日本語生成", value: "cjp" }
+          { name: 'ルーン文字', value: 'rune' },
+          { name: 'フェニキア文字', value: 'phoenicia' },
+          { name: 'ヒエログリフ', value: 'hieroglyphs' },
+          { name: '逆読み', value: 'reverse' },
+          { name: 'アナグラム', value: 'anagram' },
+          { name: 'ﾒﾝﾍﾗ文生成', value: 'genhera' },
+          { name: '怪しい日本語生成', value: 'cjp' }
         )
     )
     .addStringOption(option =>
@@ -36,6 +36,8 @@ module.exports = {
       await interaction.reply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
       return;
     }
+    
+    await interaction.deferReply();
 
     let convertedText = '';
     switch (type) {
@@ -61,7 +63,7 @@ module.exports = {
         convertedText = generateCjp(text);
         break;
       default:
-        await interaction.reply({ content: 'エラーが発生しました。', ephemeral: true });
+        await interaction.editReply('エラーが発生しました。');
         return;
     }
 
@@ -72,7 +74,6 @@ module.exports = {
       .setTimestamp()
       .setFooter({ text: 'Emubot | convert', iconURL: interaction.client.user.displayAvatarURL()  });
 
-    await interaction.deferReply();
     await interaction.editReply({ embeds: [embed] });
   },
 };
