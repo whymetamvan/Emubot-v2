@@ -16,10 +16,10 @@ module.exports = {
         .setDescription('翻訳したい言語を選択してください。')
         .setRequired(true)
         .addChoices(
-                   { name:"英語", value:"en" },
-                   { name:"中国語", value:"zh-cn" },
-                   { name:"韓国語", value:"ko" },
-                   { name:"ロシア語", value:"ru" })
+                   { name:'英語', value:'en' },
+                   { name:'中国語', value:'zh-cn' },
+                   { name:'韓国語', value:'ko' },
+                   { name:'ロシア語', value:'ru' })
     ),
   
   async execute(interaction) {
