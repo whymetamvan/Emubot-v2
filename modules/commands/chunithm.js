@@ -11,9 +11,9 @@ module.exports = {
         .setDescription('選曲オプションを選択します。')
         .setRequired(true)
         .addChoices(
-          { name: "全曲", value: "all" },
-          { name: "オリジナルのみ", value: "original" },
-          { name: "WE譜面&ULTIMAのみ", value: "weul"}
+          { name: '全曲', value: 'all' },
+          { name: 'オリジナルのみ', value: 'original' },
+          { name: 'WE譜面&ULTIMAのみ', value: 'weul' }
         )
     )
     .addIntegerOption(option =>
@@ -23,13 +23,14 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    await interaction.deferReply();
     const option = interaction.options.getString("action");
     const count = interaction.options.getInteger("count");
     const dataFilePath = path.join(__dirname, '..', '..', 'lib', 'random', 'chunithm', `${option.toUpperCase()}.txt`);
 
 
     if (!['all', 'original', 'weul'].includes(option)) {
-      await interaction.reply({ content:"選択肢から選んでください：```all、level10、weil```", ephemeral: true });
+      await interaction.editReply('選択肢から選んでください：```all、level10、weil```');
       return;
     }
 
@@ -37,11 +38,11 @@ module.exports = {
       const songList = fs.readFileSync(dataFilePath, 'utf8').split('\n').filter(song => song.trim() !== '');
 
       if (songList.length === 0) {
-        await interaction.reply({ content:"曲が見つかりませんでした。", ephemeral: true });
+        await interaction.editReply('曲が見つかりませんでした。');
         return;
       }
       if (count < 1 || count > songList.length) {
-        await interaction.reply({ content:"曲数は1以上、曲リストの総数以下で指定してください。", ephemeral: true });
+        await interaction.editReply('曲数は1以上、曲リストの総数以下で指定してください。');
         return;
       }
 
@@ -60,11 +61,10 @@ module.exports = {
         .setFooter({ text: 'Emubot | chunithm', iconURL: 'https://pbs.twimg.com/profile_images/1735059307195256832/6YSNiEle_400x400.jpg' })
         .setColor('#fffc3c');
 
-      await interaction.deferReply();
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error(error);
-      await interaction.editReply({ content: 'エラーが発生しました。', ephemeral: true });
+      await interaction.editReply('エラーが発生しました。');
     }
   }
 };
