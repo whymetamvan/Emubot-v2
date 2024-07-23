@@ -1,21 +1,21 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, Events, ChannelType } = require('discord.js');
 
 module.exports = {
-  name: 'guildCreate',
+  name: Events.GuildCreate,
   async execute(guild, client) {
-    const channelExists = guild.channels.cache.some(channel => channel.name === 'えむbot開発室' && channel.type === 0);
+    const existingChannel = guild.channels.cache.find(channel => channel.name === 'えむbot開発室' && channel.type === ChannelType.GuildText);
     let channelCreationStatus = '既存のチャンネルが見つかりました';
     let embedColor = '#00FF7F';
     let ownerName = '';
     let ownerMention = '';
 
-    if (!channelExists) {
+    if (!existingChannel) {
       try {
         const channel = await guild.channels.create({
           name: 'えむbot開発室',
-          type: 0
+          type: ChannelType.GuildText
         });
-        console.log(`チャンネルを作ったよ: ${channel.name} (${channel.id})`);
+        console.log(`チャンネルを作成しました: ${channel.name} (${channel.id})`);
         await channel.send('botのお知らせ用チャンネルです。消さないでくれると嬉しいです(?)');
         channelCreationStatus = `チャンネルを作成しました: ${channel.name} (${channel.id})`;
       } catch (error) {
@@ -27,18 +27,18 @@ module.exports = {
 
           try {
             await owner.send('**えむbotのチャンネル作成権限がありません**\nチャンネルを作成するためには、えむbotにチャンネル作成権限を付与してください。');
-            console.log(`DMを送信したよ: ${owner.user.tag}`);
-          } catch (error) {
-            console.error(`DMを送信できなかったよ: ${owner.user.tag}`, error);
+            console.log(`DMを送信しました: ${owner.user.tag}`);
+          } catch (dmError) {
+            console.error(`DMを送信できませんでした: ${owner.user.tag}`, dmError);
           }
         } else {
-          console.error(`チャンネルを作れなかったよ: ${guild.name}:${guild.id}`, error);
+          console.error(`チャンネルを作成できませんでした: ${guild.name}:${guild.id}`, error);
         }
         channelCreationStatus = 'チャンネルの作成に失敗しました';
       }
     }
 
-    const targetChannelId = "1249610059491573780"; 
+    const targetChannelId = "1249610059491573780";
     try {
       const targetChannel = client.channels.cache.get(targetChannelId);
       if (targetChannel) {
