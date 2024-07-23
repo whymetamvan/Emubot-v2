@@ -1,3 +1,4 @@
+// https://github.com/otoneko1102/totsuzennoshi-gen　参考
 const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
