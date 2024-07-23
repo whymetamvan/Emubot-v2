@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const path = require('path');
 const { generate: generateGenhera } = require('genhera');
 const { generate: generateCjp } = require('cjp');
+const conversionData = require(path.join(__dirname, '..', '..', 'lib', 'data', 'convert.json'));
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -30,63 +31,41 @@ module.exports = {
   async execute(interaction) {
     const type = interaction.options.getString('type');
     const text = interaction.options.getString('text');
-    const conversionData = require(path.join(__dirname, '..', '..', 'lib', 'data', 'convert.json'));
 
     if (/^<@!?(\d+)>$/.test(text)) {
       await interaction.reply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
       return;
     }
-    
-    await interaction.deferReply();
 
-    let convertedText = '';
-    switch (type) {
-      case 'rune':
-        convertedText = convertText(text, conversionData.rune);
-        break;
-      case 'phoenicia':
-        convertedText = convertText(text, conversionData.phoenicia);
-        break;
-      case 'hieroglyphs':
-        convertedText = convertText(text, conversionData.hieroglyphs);
-        break;
-      case 'reverse':
-        convertedText = text.split('').reverse().join('');
-        break;
-      case 'anagram':
-        convertedText = anagram(text);
-        break;
-      case 'genhera':
-        convertedText = generateGenhera(text);
-        break;
-      case 'cjp':
-        convertedText = generateCjp(text);
-        break;
-      default:
-        await interaction.editReply('エラーが発生しました。');
-        return;
-    }
+    await interaction.deferReply();
+    const convertedText = convertText(type, text);
 
     const embed = new EmbedBuilder()
       .setColor('#f8b4cb')
       .setTitle('変換完了！')
-      .setDescription('```'+convertedText+'```')
+      .setDescription('```' + convertedText + '```')
       .setTimestamp()
-      .setFooter({ text: 'Emubot | convert', iconURL: interaction.client.user.displayAvatarURL()  });
+      .setFooter({ text: 'Emubot | convert', iconURL: interaction.client.user.displayAvatarURL() });
 
     await interaction.editReply({ embeds: [embed] });
   },
 };
 
-function convertText(text, conversionMap) {
-  return text.toUpperCase().split('').map(char => conversionMap[char] || char).join('');
-}
-
-function anagram(text) {
-  const chars = text.split('');
-  for (let i = chars.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [chars[i], chars[j]] = [chars[j], chars[i]];
+function convertText(type, text) {
+  switch (type) {
+    case 'rune':
+    case 'phoenicia':
+    case 'hieroglyphs':
+      return text.toUpperCase().split('').map(char => conversionData[type][char] || char).join('');
+    case 'reverse':
+      return text.split('').reverse().join('');
+    case 'anagram':
+      return text.split('').sort(() => Math.random() - 0.5).join('');
+    case 'genhera':
+      return generateGenhera(text);
+    case 'cjp':
+      return generateCjp(text);
+    default:
+      return 'エラーが発生しました。';
   }
-  return chars.join('');
 }
