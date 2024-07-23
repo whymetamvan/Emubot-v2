@@ -28,7 +28,7 @@ module.exports = {
                 { name: 'えむbotについて', value: '暇な音ゲーマーの作ってる謎多機能botです' },
                 { name: 'helpの操作方法', value: 'ボタンを押すことでコマンド一覧等が見れます' },
                 { name: 'お知らせチャンネルについて', value: 'えむbot開発室というチャンネルでお知らせを行います。\n作成されていない場合は**/announce create**で作成してください' },
-                { name: 'サポート等', value: '[twitter](https://twitter.com/ryo_001339)  [Discord](https://discord.gg/j2gM7d2Drp)  [Github](https://github.com/VEDA00133912/Emubot-discord.js-v14/tree/main)  [サイト](htpps://https://emubot.glitch.me/index.html)' }
+                { name: 'サポート等', value: '[twitter](https://twitter.com/ryo_001339)  [Discord](https://discord.gg/j2gM7d2Drp)  [Github](https://github.com/VEDA00133912/Emubot-discord.js-v14/tree/main)  [サイト](htpps://emubot.glitch.me/index.html)' }
             );
 
         const embed2 = new EmbedBuilder()
