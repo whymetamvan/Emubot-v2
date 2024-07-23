@@ -38,7 +38,7 @@ module.exports = {
         if (!content && embeds.length) continue;
 
         const embed = new EmbedBuilder()
-          .setColor(0xf8b4cb)
+          .setColor('#f8b4cb')
           .setTimestamp(createdTimestamp)
           .setAuthor({ name: displayName, iconURL: author.displayAvatarURL() })
           .setDescription(content || '');
