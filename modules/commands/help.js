@@ -145,6 +145,7 @@ module.exports = {
                 { name: '**/prsk-stamp**', value: 'プロセカのスタンプをランダムに取得します', inline: true },
                 { name: '**/warpkey-gen**', value: 'WARP+VPNのキー生成', inline: true },
                 { name: '**/totsu-shi**', value: '突然の死ジェネレーター', inline: true }
+                )
             .setColor('#f8b4cb');
         
         const pages = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8, embed9];
