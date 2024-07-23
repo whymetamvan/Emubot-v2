@@ -7,8 +7,8 @@ module.exports = {
 
     async execute(interaction) {
         try {
-            if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ViewAuditLog)) {
-                return interaction.reply({ content: '監査ログの閲覧権限がありません', ephemeral: true });
+            if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.BanMembers)) {
+                return interaction.reply({ content: 'BAN権限がないため、BANリストの閲覧ができませんでした', ephemeral: true });
             }
 
             await interaction.deferReply();
