@@ -20,7 +20,8 @@ module.exports = {
         }
 
         const embed1 = new EmbedBuilder()
-            .setColor(0xf8b4cb)
+            .setColor('#f8b4cb')
+            .setTimestamp()
             .setTitle('えむbot｜help')
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
@@ -40,27 +41,28 @@ module.exports = {
                 { name: '**/taiko**', value: '太鼓の達人ランダム選曲', inline: true },
                 { name: '**/prsk**', value: 'プロセカランダム選曲', inline: true },
                 { name: '**/chunithm**', value: 'CHUNITHMランダム選曲', inline: true },
-                { name: '**/icon**', value: 'アイコンを表示', inline: true }
+                { name: '**/maimai**', value: 'maimaiランダム選曲', inline: true }
             )
-            .setColor(0xf8b4cb);
+            .setTimestamp()
+            .setColor('#f8b4cb');
 
         const embed3 = new EmbedBuilder()
-            .setColor(0xee99ff)
+            .setTimestamp()
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (2)')
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/translate**', value: '日本語を翻訳します\n(英、中、韓、露)', inline: true },
-                { name: '**/spoofing**', value: '別の人物へのなりすまし', inline: true },
+                { name: '**/icon**', value: 'アイコンを表示', inline: true },
                 { name: '**/ping**', value: 'ping値の表示', inline: true },
                 { name: '**/メッセージの自動展開**', value: 'デフォでオンになっているので', inline: true },
                 { name: '**/convert**', value: '文字列の変換', inline: true },
                 { name: '**/delete**', value: 'メッセージの削除', inline: true }
             )
-            .setColor(0xf8b4cb);
+            .setColor('#f8b4cb');
 
         const embed4 = new EmbedBuilder()
-            .setColor(0xee99ff)
+            .setTimestamp()
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (3)')
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
@@ -72,10 +74,10 @@ module.exports = {
                 { name: '**/omikuji**', value: '1日一回おみくじ', inline: true },
                 { name: '**/pi**', value: '指定した桁数の円周率の表示', inline: true }
             )
-            .setColor(0xf8b4cb);
+            .setColor('#f8b4cb');
 
         const embed5 = new EmbedBuilder()
-            .setColor(0xee99ff)
+            .setTimestamp()
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (4)')
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
@@ -87,10 +89,10 @@ module.exports = {
                 { name: '**/serverinfo**', value: 'サーバー情報の表示', inline: true },
                 { name: '**/shorturl**', value: 'URLの短縮', inline: true }
             )
-            .setColor(0xf8b4cb);
+            .setColor('#f8b4cb');
 
         const embed6 = new EmbedBuilder()
-            .setColor(0xee99ff)
+            .setTimestamp()
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (5)')
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
@@ -102,10 +104,10 @@ module.exports = {
                 { name: '**/whois**', value: 'whois検索', inline: true },
                 { name: '**/yahoonews**', value: 'yahooニュースの取得', inline: true }
             )
-            .setColor(0xf8b4cb);
+            .setColor('#f8b4cb');
 
         const embed7 = new EmbedBuilder()
-            .setColor(0xee99ff)
+            .setTimestamp()
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (6)')
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
@@ -117,23 +119,35 @@ module.exports = {
                 { name: '**/link-to-image**', value: '画像をリンクに変換します', inline: true },
                 { name: '**/banount**', value: 'BAN数を表示', inline: true }
             )
-            .setColor(0xf8b4cb);
+            .setColor('#f8b4cb');
 
         const embed8 = new EmbedBuilder()
-            .setColor(0xee99ff)
+            .setTimestamp()
             .setTitle("えむbot｜help")
             .setDescription('コマンド一覧 (7)')
             .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
             .addFields(
                 { name: '**/mcserver**', value: 'マイクラのサーバーステータスと表示', inline: true },
                 { name: '**/rate**', value: 'USD / JPY', inline: true },
+                { name: '**/spoofing**', value: 'なりすまし', inline: true },
                 { name: '**/urlchecker**', value: 'URLの危険性を判定', inline: true },
                 { name: '**/dot**', value: 'ドット絵に変換', inline: true },
                 { name: '**/ticket**', value: 'プライベートチャンネルを作成', inline: true }
             )
-            .setColor(0xf8b4cb);
+            .setColor('#f8b4cb');
 
-        const pages = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8];
+        const embed9 = new EmbedBuilder()
+            .setTimestamp()
+            .setTitle("えむbot｜help")
+            .setDescription('コマンド一覧 (7)')
+            .setFooter({ text:'Emubot | help', iconURL: interaction.client.user.displayAvatarURL() })
+            .addFields(
+                { name: '**/prsk-stamp**', value: 'プロセカのスタンプをランダムに取得します', inline: true },
+                { name: '**/warpkey-gen**', value: 'WARP+VPNのキー生成', inline: true },
+                { name: '**/totsu-shi**', value: '突然の死ジェネレーター', inline: true }
+            .setColor('#f8b4cb');
+        
+        const pages = [embed1, embed2, embed3, embed4, embed5, embed6, embed7, embed8, embed9];
         await buttonPages(interaction, pages);
 
         const cooldownTime = 20000; 
