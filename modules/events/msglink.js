@@ -1,10 +1,10 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, Events } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const SETTINGS_FILE = path.join(__dirname, '..', '..', 'lib', 'data', 'msglink.json');
 
 module.exports = {
-  name: 'messageCreate',
+  name: Events.MessageCreate,
   async execute(message, client) {
     if (message.author.bot) return;
 
@@ -38,7 +38,7 @@ module.exports = {
         if (!content && embeds.length) continue;
 
         const embed = new EmbedBuilder()
-          .setColor('#f8b4cb')
+          .setColor(0xf8b4cb)
           .setTimestamp(createdTimestamp)
           .setAuthor({ name: displayName, iconURL: author.displayAvatarURL() })
           .setDescription(content || '');
