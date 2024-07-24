@@ -19,6 +19,12 @@ module.exports = {
     if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
       return interaction.reply({ content: 'メッセージを管理する権限がありません。', ephemeral: true });
     }
+    if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ReadMessageHistory)) {
+      return interaction.reply({ content: 'メッセージ履歴を読む権限がありません。', ephemeral: true });
+    }
+    if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ViewChannel)) {
+      return interaction.reply({ content: 'チャンネルを見る権限がありません。', ephemeral: true });
+    }
     await interaction.deferReply({ ephemeral: true });
 
     const count = interaction.options.getInteger('count');
