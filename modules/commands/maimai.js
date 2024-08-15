@@ -33,6 +33,11 @@ module.exports = {
       return;
     }
 
+    if (count > 20) {
+      await interaction.reply('曲数は20以下で指定してください。');
+      return;
+    }
+    
     try {
       const songList = fs.readFileSync(dataFilePath, 'utf8').split('\n').filter(song => song.trim() !== '');
 
