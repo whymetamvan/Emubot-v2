@@ -11,8 +11,8 @@ module.exports = {
         .setDescription('選曲オプションを選択します。')
         .setRequired(true)
         .addChoices(
-          { name: '全曲', value: 'all' },
-          { name: '☆10のみ', value: 'level10' }
+          { name: "全曲", value: "all" },
+          { name: "☆10のみ", value: "level10" }
         )
     )
     .addIntegerOption(option =>
@@ -29,7 +29,12 @@ module.exports = {
     await interaction.deferReply();
 
     if (!['all', 'level10'].includes(option)) {
-      await interaction.editReply('選択肢から選んでください：```全曲、☆10```');
+      await interaction.editReply("選択肢から選んでください：all、level10");
+      return;
+    }
+
+    if (count > 20) {
+      await interaction.editReply('曲数は20以下で指定してください。');
       return;
     }
 
@@ -37,11 +42,11 @@ module.exports = {
       const songList = fs.readFileSync(dataFilePath, 'utf8').split('\n').filter(song => song.trim() !== '');
 
       if (songList.length === 0) {
-        await interaction.editReply('曲が見つかりませんでした。');
+        await interaction.editReply("曲が見つかりませんでした。");
         return;
       }
       if (count < 1 || count > songList.length) {
-        await interaction.editReply('曲数は1以上、曲リストの総数以下で指定してください。');
+        await interaction.editReply("曲数は1以上、曲リストの総数以下で指定してください。");
         return;
       }
 
