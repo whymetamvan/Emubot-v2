@@ -3,18 +3,14 @@ const client = require('./clients');
 require('./modules/events/error');
 const miqEvent = require('./modules/events/miq');
 miqEvent(client);
-
 const { Collection } = require('discord.js');
-
 const fs = require('fs');
 const path = require('path');
 
-// ログイン
 client.on('ready', () => {
     console.log(`${client.user.tag}、起動！`);
 });
 
-// コマンドを読み込む
 client.commands = new Collection();
 
 const commandFiles = fs.readdirSync(path.join(__dirname, 'modules', 'commands')).filter(file => file.endsWith('.js'));
@@ -23,7 +19,6 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-// イベントを読み込む
 const eventFiles = fs.readdirSync(path.join(__dirname, 'modules', 'events')).filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {
     const event = require(path.join(__dirname, 'modules', 'events', file));
