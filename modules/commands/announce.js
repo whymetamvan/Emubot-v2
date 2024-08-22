@@ -4,6 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('announce-create')
         .setDescription('お知らせをするえむbot開発室を作ります'),
+    
     async execute(interaction) {
         const guild = interaction.guild;
         const channelName = 'えむbot開発室';
