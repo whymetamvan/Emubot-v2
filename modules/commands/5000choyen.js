@@ -7,13 +7,11 @@ module.exports = {
     .addStringOption(option =>
       option.setName('top')
         .setDescription('上部文字列')
-        .setRequired(true),
-    )
+        .setRequired(true))
     .addStringOption(option =>
       option.setName('bottom')
         .setDescription('下部文字列')
-        .setRequired(true),
-    ),
+        .setRequired(true)),
   
   async execute(interaction) {
     try {
