@@ -10,13 +10,11 @@ module.exports = {
                 .setRequired(true)
                 .addChoices(
                     { name: 'Nitroギフト形式', value: 'nitro' },
-                    { name: 'プロモNitro形式', value: 'promo' }
-                ))
+                    { name: 'プロモNitro形式', value: 'promo' },))
         .addIntegerOption(option =>
             option.setName('count')
                 .setDescription('生成する数')
                 .setRequired(true)),
-
 
     async execute(interaction) {  
         try {
@@ -39,7 +37,6 @@ module.exports = {
                 .setDescription(`**Fake ${type === 'nitro' ? 'Nitro Gift' : 'Promo Nitro'} Links** <a:nitronitronitro:1240815301801545789>\n${type === 'nitro' ? 'Nitroギフトリンク' : 'プロモニトロリンク'}\n${nitroLinks.join('\n')}`);
 
             await interaction.editReply({ embeds: [embed] });
-   
         } catch (error) {
             console.error('リンクの生成中にエラーが発生しました：', error);
             await interaction.editReply({ content: 'リンクの生成中にエラーが発生しました。', ephemeral: true });
@@ -50,7 +47,6 @@ module.exports = {
 function generateNitroLinks(quantity, type, channelID) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const nitroLinks = [];
-
 
     for (let j = 0; j < quantity; j++) {
         let code = '';
