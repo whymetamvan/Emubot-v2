@@ -5,10 +5,10 @@ const serverCooldowns = new Collection();
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('spoofing')
-    .setDescription('なりすまし的な(?)')
+    .setDescription('他のユーザーになりすましできるコマンド')
     .addUserOption(option =>
       option.setName('target')
-        .setDescription('メンションまたはユーザーID')
+        .setDescription('メンションまたはユーザーIDでユーザーを指定します')
         .setRequired(true))
     .addStringOption(option =>
       option.setName('message')
@@ -16,7 +16,10 @@ module.exports = {
         .setRequired(true))
     .addAttachmentOption(option =>
       option.setName('attachment')
-        .setDescription('送信する画像')),
+        .setDescription('送信する画像'))
+    .addStringOption(option =>
+      option.setName('nickname')
+        .setDescription('ニックネームを指定')),
 
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
@@ -34,6 +37,7 @@ module.exports = {
     const targetUser = interaction.options.getUser('target');
     const message = interaction.options.getString('message');
     const attachment = interaction.options.getAttachment('attachment');
+    const nickname = interaction.options.getString('nickname'); // ニックネームオプションの取得
 
     const invalidContentChecks = [
       { regex: /@everyone|@here/, error: 'メッセージに@everyoneまたは@hereを含めることはできません。' },
@@ -49,24 +53,24 @@ module.exports = {
       }
     }
 
-    let webhook; 
+    let webhook;
     try {
-      const member = await interaction.guild.members.fetch(targetUser.id);
-      const nickname = member?.nickname || targetUser.displayName;
-      const avatarURL = member.displayAvatarURL({ format: null, size: 1024 });
+      const member = await interaction.guild.members.fetch(targetUser.id).catch(() => null);
+      const displayName = nickname || (member?.nickname || targetUser.displayName);
+      const avatarURL = targetUser.displayAvatarURL({ format: null, size: 1024 });
 
       webhook = await interaction.channel.createWebhook({
-        name: nickname,
+        name: displayName,
         avatar: avatarURL,
         reason: 'Spoofingコマンドを実行',
       });
+
       const webhookClient = new WebhookClient({ id: webhook.id, token: webhook.token });
       const options = { content: message, files: attachment ? [attachment] : [] };
-      
+
       await webhookClient.send(options);
       serverCooldowns.set(guildId, Date.now());
       setTimeout(() => serverCooldowns.delete(guildId), 5000);
-
       await interaction.editReply('メッセージを送信しました。');
     } catch (error) {
       console.error('Error creating or sending webhook:', error);
@@ -74,7 +78,7 @@ module.exports = {
     } finally {
       if (webhook) {
         try {
-          await webhook.delete('spoofing完了');
+          await webhook.delete('Cleaning up webhook after operation');
         } catch (cleanUpError) {
           console.error('Error cleaning up webhook:', cleanUpError);
         }
