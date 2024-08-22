@@ -5,7 +5,7 @@ const serverCooldowns = new Collection();
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('spoofing')
-    .setDescription('なりすまし的な(?)')
+    .setDescription('他ユーザーになりすましできるコマンド')
     .addUserOption(option =>
       option.setName('target')
         .setDescription('メンションまたはユーザーID')
@@ -20,14 +20,12 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
-
     const guildId = interaction.guild.id;
 
     if (serverCooldowns.has(guildId) && Date.now() < serverCooldowns.get(guildId) + 5000) {
       const timeLeft = ((serverCooldowns.get(guildId) + 5000 - Date.now()) / 1000).toFixed(1);
       return interaction.editReply(`コマンドのクールダウン中です。あと${timeLeft}秒待ってください。`);
     }
-
     if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageWebhooks)) {
       return interaction.editReply('webhookの管理権限がありません');
     }
@@ -55,22 +53,20 @@ module.exports = {
       const member = await interaction.guild.members.fetch(targetUser.id);
       const nickname = member?.nickname || targetUser.displayName;
       const avatarURL = member.displayAvatarURL({ format: null, size: 1024 });
-
       const webhook = await interaction.channel.createWebhook({
         name: nickname,
         avatar: avatarURL,
-        reason: 'Spoofing command execution',
+        reason: 'Spoofingコマンドで使用',
       });
 
       const webhookClient = new WebhookClient({ id: webhook.id, token: webhook.token });
       const options = { content: message, files: attachment ? [attachment] : [] };
 
       await webhookClient.send(options);
-      await webhook.delete('Spoofing message sent');
+      await webhook.delete('Spoofingコマンドを実行');
 
       serverCooldowns.set(guildId, Date.now());
       setTimeout(() => serverCooldowns.delete(guildId), 5000);
-
       await interaction.editReply('メッセージを送信しました。');
     } catch (error) {
       console.error('Error creating or sending webhook:', error);
@@ -78,7 +74,6 @@ module.exports = {
 
       const webhooks = await interaction.channel.fetchWebhooks();
       const botWebhooks = webhooks.filter(wh => wh.owner.id === interaction.client.user.id);
-
       for (const botWebhook of botWebhooks.values()) {
         try {
           await botWebhook.delete('Cleaning up leftover webhooks');
