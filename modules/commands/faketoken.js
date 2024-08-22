@@ -7,8 +7,7 @@ module.exports = {
     .addIntegerOption(option =>
       option.setName('count')
         .setDescription('生成する数')
-        .setRequired(true)
-    ),
+        .setRequired(true)),
 
   async execute(interaction) {
     try {
@@ -36,7 +35,6 @@ module.exports = {
 function getRandomMemberIds(members, count) {
   return Array.from({ length: count }, () => members.random().id);
 }
-
 function generateToken(memberId) {
   const base64Id = Buffer.from(memberId).toString('base64');
   const randomSegment = length => Array.from({ length }, () => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-'.charAt(Math.floor(Math.random() * 64))).join('');
