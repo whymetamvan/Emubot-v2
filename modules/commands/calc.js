@@ -8,8 +8,7 @@ module.exports = {
     .addStringOption(option =>
       option.setName('expression')
         .setDescription('計算する数式')
-        .setRequired(true)
-    ),
+        .setRequired(true)),
   
   async execute(interaction) {
     try {
@@ -20,7 +19,6 @@ module.exports = {
       const result = Function(`'use strict'; return ${expression}`)();
 
       const thumbnailPath = path.join(__dirname, '../../lib/images/calc.png');
-
       const embed = new EmbedBuilder()
       .setColor('#f8b4cb')
       .setTitle('Emubot | calculator')
@@ -31,7 +29,6 @@ module.exports = {
 
       await interaction.editReply(
         { embeds: [embed],files: [{attachment:thumbnailPath,name:path.basename(thumbnailPath)}] });
-      
     } catch (error) {
       console.error('計算時にエラーが発生しました',error);
       await interaction.editReply('式の計算に失敗しました。');
