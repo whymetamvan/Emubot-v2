@@ -74,7 +74,7 @@ module.exports = {
     } finally {
       if (webhook) {
         try {
-          await webhook.delete('Cleaning up webhook after operation');
+          await webhook.delete('spoofing完了');
         } catch (cleanUpError) {
           console.error('Error cleaning up webhook:', cleanUpError);
         }
