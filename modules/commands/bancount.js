@@ -10,7 +10,6 @@ module.exports = {
             if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.BanMembers)) {
                 return interaction.reply({ content: 'BAN権限がないため、BANリストの閲覧ができませんでした', ephemeral: true });
             }
-
             await interaction.deferReply();
             const bannedUsers = await interaction.guild.bans.fetch();
             const bannedUsersCount = bannedUsers.size;
