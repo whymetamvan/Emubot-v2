@@ -16,13 +16,11 @@ module.exports = {
     ),
   
   async execute(interaction) {
-    
     try {
+      await interaction.deferReply();
       const top = interaction.options.getString('top');
       const bottom = interaction.options.getString('bottom');
-
-      await interaction.deferReply();
-
+      
       const embed = new EmbedBuilder()
         .setColor('#f8b4cb')
         .setFooter({ text:'Emubot | 5000choyen', iconURL: interaction.client.user.displayAvatarURL() })
