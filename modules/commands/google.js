@@ -9,8 +9,8 @@ module.exports = {
         .addStringOption(option => 
             option.setName('query')
                 .setDescription('検索ワード')
-                .setRequired(true)
-        ),
+                .setRequired(true)),
+    
     async execute(interaction) {
         await interaction.deferReply();
         const query = interaction.options.getString('query');
@@ -25,7 +25,6 @@ module.exports = {
 
             const $ = cheerio.load(data);
             const searchResults = [];
-
             $('div.g').each((i, elem) => {
                 if (i >= 5) return;  
 
@@ -36,7 +35,6 @@ module.exports = {
                     searchResults.push({ title, link });
                 }
             });
-
             if (searchResults.length === 0) {
                 return interaction.editReply('検索結果が見つかりませんでした。');
             }
@@ -51,7 +49,6 @@ module.exports = {
             });
 
             await interaction.editReply({ embeds: [embed] });
-
         } catch (error) {
             console.error(error);
             await interaction.editReply('エラーが発生しました。');
