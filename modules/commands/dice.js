@@ -10,7 +10,6 @@ module.exports = {
         try {
             await interaction.deferReply();
             const thumbnailPath = path.join(__dirname, '../../lib/images/dice.gif');
-
             const diceRoll = Math.floor(Math.random() * 6) + 1;
 
             const embed = new EmbedBuilder()
@@ -24,7 +23,6 @@ module.exports = {
             await interaction.editReply({ embeds: [embed],files: [{attachment:thumbnailPath,name:path.basename(thumbnailPath)}] });
         } catch (error) {
             console.error('diceエラー',error);
-
             try {
                 await interaction.editReply({ content: 'エラーが発生しました', ephemeral: true });
             } catch (replyError) {
