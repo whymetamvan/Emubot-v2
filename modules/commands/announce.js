@@ -11,7 +11,6 @@ module.exports = {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
             return interaction.reply({ content: 'あなたに実行権限が有りません。', ephemeral: true });
         }
-
         if (!interaction.guild.members.me.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
             return interaction.reply({ content: 'チャンネルの作成権限がありません。', ephemeral: true });
         }
