@@ -30,7 +30,6 @@ module.exports = {
     const count = interaction.options.getInteger('count');
     const user = interaction.options.getUser('user');
     const channel = interaction.channel;
-
     if (count > 100) {
       return interaction.editReply({ content: '一度に削除できるメッセージ数は 100 件までです。', ephemeral: true });
     }
@@ -42,7 +41,6 @@ module.exports = {
       if (userMessages.size === 0) {
         return interaction.editReply({ content: 'ユーザーが見つかりません。', ephemeral: true });
       }
-
       const twoWeeksAgo = Date.now() - 1209600000; 
       const oldMessages = userMessages.filter(m => m.createdTimestamp < twoWeeksAgo);
       if (oldMessages.size > 0) {
@@ -57,7 +55,6 @@ module.exports = {
         .setTimestamp()
         .setFooter({ text:'Emubot | Delete', iconURL:'https://rakugakiicon.com/ri/wp-content/uploads/2015/06/27bdb42056ff1f4f0d57c83c096067f3.png'})
         .setDescription(`削除したメッセージ数: ${deletedMessages.size}`);
-
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       console.error('メッセージの削除中にエラーが発生しました:', error);
