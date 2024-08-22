@@ -19,14 +19,11 @@ module.exports = {
           { name: '逆読み', value: 'reverse' },
           { name: 'アナグラム', value: 'anagram' },
           { name: 'ﾒﾝﾍﾗ文生成', value: 'genhera' },
-          { name: '怪しい日本語生成', value: 'cjp' }
-        )
-    )
+          { name: '怪しい日本語生成', value: 'cjp' },))
     .addStringOption(option =>
       option.setName('text')
         .setDescription('変換するテキストを入力してください。')
-        .setRequired(true)
-    ),
+        .setRequired(true)),
 
   async execute(interaction) {
     const type = interaction.options.getString('type');
@@ -36,7 +33,6 @@ module.exports = {
       await interaction.reply({ content: 'メンションが含まれているため、変換を行いません。', ephemeral: true });
       return;
     }
-
     await interaction.deferReply();
     const convertedText = convertText(type, text);
 
@@ -46,7 +42,6 @@ module.exports = {
       .setDescription('```' + convertedText + '```')
       .setTimestamp()
       .setFooter({ text: 'Emubot | convert', iconURL: interaction.client.user.displayAvatarURL() });
-
     await interaction.editReply({ embeds: [embed] });
   },
 };
