@@ -5,7 +5,7 @@ const serverCooldowns = new Collection();
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('spoofing')
-    .setDescription('他ユーザーになりすましできるコマンド')
+    .setDescription('なりすまし的な(?)')
     .addUserOption(option =>
       option.setName('target')
         .setDescription('メンションまたはユーザーID')
@@ -20,6 +20,7 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
+
     const guildId = interaction.guild.id;
 
     if (serverCooldowns.has(guildId) && Date.now() < serverCooldowns.get(guildId) + 5000) {
@@ -42,41 +43,38 @@ module.exports = {
       { regex: /[\w-]{24}\.[\w-]{6}\.[\w-]{27}/, error: 'メッセージにトークンを含めることはできません。' },
       { regex: /\|{4,}/, error: 'メッセージに連続するスポイラーを含めることはできません。' }
     ];
-
     for (const check of invalidContentChecks) {
       if (check.regex.test(message)) {
         return interaction.editReply(check.error);
       }
     }
 
+    let webhook; 
     try {
       const member = await interaction.guild.members.fetch(targetUser.id);
       const nickname = member?.nickname || targetUser.displayName;
       const avatarURL = member.displayAvatarURL({ format: null, size: 1024 });
-      const webhook = await interaction.channel.createWebhook({
+
+      webhook = await interaction.channel.createWebhook({
         name: nickname,
         avatar: avatarURL,
-        reason: 'Spoofingコマンドで使用',
+        reason: 'Spoofingコマンドを実行',
       });
-
       const webhookClient = new WebhookClient({ id: webhook.id, token: webhook.token });
       const options = { content: message, files: attachment ? [attachment] : [] };
-
+      
       await webhookClient.send(options);
-      await webhook.delete('Spoofingコマンドを実行');
-
       serverCooldowns.set(guildId, Date.now());
       setTimeout(() => serverCooldowns.delete(guildId), 5000);
+
       await interaction.editReply('メッセージを送信しました。');
     } catch (error) {
       console.error('Error creating or sending webhook:', error);
       await interaction.editReply('メッセージの送信中にエラーが発生しました。');
-
-      const webhooks = await interaction.channel.fetchWebhooks();
-      const botWebhooks = webhooks.filter(wh => wh.owner.id === interaction.client.user.id);
-      for (const botWebhook of botWebhooks.values()) {
+    } finally {
+      if (webhook) {
         try {
-          await botWebhook.delete('Cleaning up leftover webhooks');
+          await webhook.delete('Cleaning up webhook after operation');
         } catch (cleanUpError) {
           console.error('Error cleaning up webhook:', cleanUpError);
         }
